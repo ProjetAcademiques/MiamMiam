@@ -33,6 +33,7 @@ body{
     color:#455551;
     
 }
+
 h2{
     text-align: center;
     margin-top: 60px;
@@ -55,9 +56,10 @@ form input{
 
 form button{
     border-radius: 15px;
-    width: 40%;
+    width: 30%;
     border: none;
     background-color:#cfe8d5;
+    height: 40px;
 }
 a.btn{
     display: inline-block;
@@ -69,4 +71,8 @@ a.btn{
     border-radius: 15px;
     background-color: white;
     width: 40%;
+}
+#champs_obli{
+    position: absolute;
+    bottom: 0%;
 }

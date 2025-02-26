@@ -42,7 +42,7 @@ final class UtilisateurController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_utilisateur_show', methods: ['GET'])]
+    #[Route('/{id<\d+>}', name: 'app_utilisateur_show', methods: ['GET'])]
     public function show(Utilisateur $utilisateur): Response
     {
         return $this->render('utilisateur/show.html.twig', [
@@ -68,7 +68,7 @@ final class UtilisateurController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_utilisateur_delete', methods: ['POST'])]
+    #[Route('/{id<\d+>}', name: 'app_utilisateur_delete', methods: ['POST'])]
     public function delete(Request $request, Utilisateur $utilisateur, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$utilisateur->getId(), $request->getPayload()->getString('_token'))) {
@@ -78,4 +78,48 @@ final class UtilisateurController extends AbstractController
 
         return $this->redirectToRoute('app_utilisateur_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/saveForm', name: 'app_save_form', methods: ['POST'])]
+    public function saveForm1(Request $request):Response
+    {
+        $session = $request->getSession();
+        $email = $request->request->get('email');
+        $password = $request->request->get('password');
+        if (!$email || !$password) {
+            return new Response('Email et mot de passe requis.',400);
+
+        }
+        $session->set('email', $email);
+        $session->set('password', $password);
+        return $this->redirectToRoute('register_page');
+
+}
+
+    #[Route('/registerForm', name: 'app_register_form', methods: ['POST','GET'])]
+    
+    public function registerForm(Request $request,EntityManagerInterface $entityManager):Response
+    {
+        $session = $request->getSession();
+        if (!$session->has('email') || !$session->has('password')) {
+            return new Response('Les informations sont manquantes.Veuillez recommencer.',400);
+        }
+        $email = $session->get('email');
+        $password = $session->get('password');
+        $pseudo = $request->request->get('pseudonyme');
+        if (!$pseudo) {
+            return new Response('Pseudo requis.',400);
+        }
+        $utilisateur = new Utilisateur();
+        $utilisateur->setPseudo($pseudo);
+        $utilisateur->setAdressemail($email);
+        $hashedPassword = password_hash($password,PASSWORD_BCRYPT);
+        $utilisateur->setMDP($hashedPassword);
+        $utilisateur->setDateDeCreation(new \DateTime());
+        $entityManager->persist($utilisateur);
+        $entityManager->flush();
+        $session->remove('email');
+        $session->remove('password');
+        return $this->redirectToRoute('app_page_principale');
+}
+
 }

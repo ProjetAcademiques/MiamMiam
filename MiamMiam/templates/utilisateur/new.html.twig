@@ -16,7 +16,7 @@
         </div>
         <div class="InscriptionForm">
             <h2>S'inscrire</h2>
-            <form action="" method="POST">
+            <form action="{{ path('app_save_form')}}" method="POST">
                 <label for="E-mail">E-mail*</label>
                 <input type="email" name="email" id="E-mail" required>
                 <label for="Password">Mot de passe*</label>
