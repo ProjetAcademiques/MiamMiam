@@ -1,7 +1,28 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Connexion{% endblock %}
+{%block stylesheets %}
+    {{ parent() }} 
+    {{ encore_entry_link_tags('app') }}
+    <link rel="stylesheet" href="{{ asset('build/css/login.css') }}">
+{% endblock %}
 
 {% block body %}
-    {{ include('utilisateur/_form.html.twig') }}
+<div class="Connexion">
+    <div class="RedirectionInscriptionForm">
+        <h2>Vous n'avez pas encore de compte?</h2>       
+            <a href="{{ path('app_utilisateur_new') }}" class="btn">Se connecter</a>
+    </div>
+    <div class="ConnexionForm">
+        <h2>Se connecter</h2>
+        <form action="" method="POST">
+            <label for="E-mail">E-mail*</label>
+            <input type="email" name="email" id="E-mail" required>
+            <label for="Password">Mot de passe*</label>
+            <input type="password" name="password" id="Password" required>
+            <button type="submit">Se conecter</button> 
+        </form>
+        <p id="champs_obli">*Champs obligatoires</p>
+    </div>
+</div>
 {% endblock %}

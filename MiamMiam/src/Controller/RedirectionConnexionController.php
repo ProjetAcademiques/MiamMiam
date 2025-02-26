@@ -8,6 +8,7 @@ class RedirectionConnexionController extends AbstractController{
     public function loginPage(){
         return $this->render('utilisateur/login.html.twig');
     }
+    
 
   
 }

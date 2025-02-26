@@ -2,18 +2,22 @@
 
 {% block title %}Inscription{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }} 
+    {{ encore_entry_link_tags('app') }}
+    <link rel="stylesheet" href="{{ asset('build/css/login.css') }}">
+{% endblock %}
+
 {% block body %}
     <div class="Inscription">
         <div class="RedirectionConnexionForm">
-            <h2>Vous avez déjà un compte?</h2>
-            
-                 <button type="submit">Se connecter</button>
-            
+            <h2>Vous avez déjà un compte?</h2>       
+                <a href="{{ path('login_page') }}" class="btn">Se connecter</a>
         </div>
         <div class="InscriptionForm">
             <h2>S'inscrire</h2>
             <form action="" method="POST">
-                <label for="E-mail">E-mai*</label>
+                <label for="E-mail">E-mail*</label>
                 <input type="email" name="email" id="E-mail" required>
                 <label for="Password">Mot de passe*</label>
                 <input type="password" name="password" id="Password" required>
