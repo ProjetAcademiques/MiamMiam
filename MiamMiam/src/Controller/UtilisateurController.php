@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Password\PasswordHasherInterface;
 
 #[Route('/utilisateur')]
 final class UtilisateurController extends AbstractController
@@ -91,6 +92,7 @@ final class UtilisateurController extends AbstractController
         }
         $session->set('email', $email);
         $session->set('password', $password);
+        $session->save();
         return $this->redirectToRoute('register_page');
 
 }
@@ -119,7 +121,20 @@ final class UtilisateurController extends AbstractController
         $entityManager->flush();
         $session->remove('email');
         $session->remove('password');
-        return $this->redirectToRoute('app_page_principale');
+        return $this->redirectToRoute('app_register_form');
 }
+#[Route('/loginForm', name: 'app_login_form', methods: ['POST'])]
+public function LoginForm(Request $request,EntityManagerInterface $entityManager):Response{
+    $email = $request->request->get('email');
+    $password = $request->request->get('password');
+    $utilisateur = $entityManager->getRepository(Utilisateur::class)->findOneBy(['adressemail' => $email]);
+    if (!$utilisateur) {
+        return new Response('Email incorrect.',401);
+    }
+    if (!password_verify($password, $utilisateur->getMDP())) {
+        return new Response('Mot de passe incorrect.', 401);
+    }
+    return $this->redirectToRoute('app_register_form');
 
+}
 }
