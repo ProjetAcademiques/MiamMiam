@@ -86,6 +86,10 @@ final class UtilisateurController extends AbstractController
         $session = $request->getSession();
         $email = $request->request->get('email');
         $password = $request->request->get('password');
+        $confirmPassword = $request->request->get('passwordConfirm');
+        if ($password !== $confirmPassword){
+            return new Response('Le mot de passe et la confirmation doivent être les mêmes',400);
+        }
         if (!$email || !$password) {
             return new Response('Email et mot de passe requis.',400);
 
