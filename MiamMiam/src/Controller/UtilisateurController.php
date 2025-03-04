@@ -125,7 +125,7 @@ final class UtilisateurController extends AbstractController
         $entityManager->flush();
         $session->remove('email');
         $session->remove('password');
-        return $this->redirectToRoute('app_register_form');
+        return $this->redirectToRoute('home_page');
 }
 #[Route('/loginForm', name: 'app_login_form', methods: ['POST'])]
 public function LoginForm(Request $request,EntityManagerInterface $entityManager):Response{
