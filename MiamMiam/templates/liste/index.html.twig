@@ -2,28 +2,30 @@
 
 {% block title %}Liste index{% endblock %}
 
+{%block stylesheets %}
+    {{ parent() }} 
+    {{ encore_entry_link_tags('app') }}
+    <link rel="stylesheet" href="{{ asset('build/css/liste.css') }}">
+{% endblock %}
+
 {% block body %}
     <h1>Liste index</h1>
 
     <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>DateDeCreation</th>
-                <th>actions</th>
-            </tr>
-        </thead>
+        
         <tbody>
         {% for liste in listes %}
             <tr>
+                <th>Liste</th>
                 <td>{{ liste.id }}</td>
+            
+                <th>Nom</th>
                 <td>{{ liste.nom }}</td>
+            
+                <th>DateDeCreation</th>
                 <td>{{ liste.DateDeCreation ? liste.DateDeCreation|date('Y-m-d') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_liste_show', {'id': liste.id}) }}">show</a>
-                    <a href="{{ path('app_liste_edit', {'id': liste.id}) }}">edit</a>
-                </td>
+
+                <th>{{ include('liste/_delete_form.html.twig') }}</th>
             </tr>
         {% else %}
             <tr>
