@@ -81,12 +81,16 @@ final class UtilisateurController extends AbstractController
     }
 
     #[Route('/saveForm', name: 'app_save_form', methods: ['POST'])]
-    public function saveForm1(Request $request):Response
+    public function saveForm1(Request $request,EntityManagerInterface $entityManager):Response
     {
         $session = $request->getSession();
         $email = $request->request->get('email');
         $password = $request->request->get('password');
         $confirmPassword = $request->request->get('passwordConfirm');
+        $utilisateur = $entityManager->getRepository(Utilisateur::class)->findOneBy(['adressemail' => $email]);
+        if ($utilisateur){
+            return new Response('Addresse-Mail déja existante',400);
+        }
         if ($password !== $confirmPassword){
             return new Response('Le mot de passe et la confirmation doivent être les mêmes',400);
         }
@@ -106,9 +110,6 @@ final class UtilisateurController extends AbstractController
     public function registerForm(Request $request,EntityManagerInterface $entityManager):Response
     {
         $session = $request->getSession();
-        if (!$session->has('email') || !$session->has('password')) {
-            return new Response('Les informations sont manquantes.Veuillez recommencer.',400);
-        }
         $email = $session->get('email');
         $password = $session->get('password');
         $pseudo = $request->request->get('pseudonyme');
