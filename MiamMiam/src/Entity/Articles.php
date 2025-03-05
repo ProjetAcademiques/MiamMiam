@@ -40,10 +40,17 @@ class Articles
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $DateAjout = null;
 
+    /**
+     * @var Collection<int, Contenue>
+     */
+    #[ORM\ManyToMany(targetEntity: Contenue::class, mappedBy: 'id_article')]
+    private Collection $contenues;
+
     public function __construct()
     {
         $this->types = new ArrayCollection();
         $this->magasins = new ArrayCollection();
+        $this->contenues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -149,6 +156,33 @@ class Articles
     public function setDateAjout(\DateTimeInterface $DateAjout): static
     {
         $this->DateAjout = $DateAjout;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Contenue>
+     */
+    public function getContenues(): Collection
+    {
+        return $this->contenues;
+    }
+
+    public function addContenue(Contenue $contenue): static
+    {
+        if (!$this->contenues->contains($contenue)) {
+            $this->contenues->add($contenue);
+            $contenue->addIdArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContenue(Contenue $contenue): static
+    {
+        if ($this->contenues->removeElement($contenue)) {
+            $contenue->removeIdArticle($this);
+        }
 
         return $this;
     }
