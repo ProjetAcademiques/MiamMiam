@@ -24,6 +24,11 @@ class Liste
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $DateDeCreation = null;
 
+    public function __construct()
+    {
+        $this->DateDeCreation = new \DateTime();
+        $this->creePar = ;
+    }
     public function getId(): ?int
     {
         return $this->id;
