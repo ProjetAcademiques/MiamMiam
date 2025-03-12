@@ -1,0 +1,78 @@
+body{
+    background-color: #cfe8d5;
+}
+.Inscription, .Connexion{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 40%;
+    height: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+}
+.RedirectionConnexionForm, .RedirectionInscriptionForm{
+    display: flex;
+    flex-direction: column;
+    background-color: #93555a;
+    color:white;
+    width: 35%;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    align-items: center;
+    justify-content: center;
+    font-family: MontSerrat;
+}
+.InscriptionForm, .ConnexionForm{
+    background-color: white;
+    width: 65%;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    color:#455551;
+    
+}
+
+h2{
+    text-align: center;
+    margin-top: 60px;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+form input{
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #cccccc;
+    width: 60%;
+    background-color: #cfe8d5 ;
+    margin: 10px;
+}
+
+form button{
+    border-radius: 15px;
+    width: 30%;
+    border: none;
+    background-color:#cfe8d5;
+    height: 40px;
+}
+a.btn{
+    display: inline-block;
+    padding: 10px 20px;
+    color: black;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    border-radius: 15px;
+    background-color: white;
+    width: 40%;
+}
+#champs_obli{
+    position: absolute;
+    bottom: 0%;
+}

@@ -1,0 +1,14 @@
+footer {
+    display: block;
+    background-color: var(--white);
+    width: 100vw;
+    height: 5rem;
+    z-index: 2;
+}
+
+footer div {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    align-items: center;
+}
