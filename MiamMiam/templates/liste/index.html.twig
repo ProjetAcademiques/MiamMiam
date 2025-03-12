@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Liste index</h1>
+<main>
         {{ include('liste/_form.html.twig') }}
         <tbody>
         {% for liste in listes %}
@@ -31,5 +31,5 @@
         {% endfor %}
         </tbody>
 
-    <a href="{{ path('app_liste_new') }}">Create new</a>
+</main>
 {% endblock %}
