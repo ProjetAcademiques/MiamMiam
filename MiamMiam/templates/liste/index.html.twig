@@ -10,7 +10,7 @@
 
 {% block body %}
     <h1>Liste index</h1>
-        
+        {{ include('liste/_form.html.twig') }}
         <tbody>
         {% for liste in listes %}
             <div id="test">

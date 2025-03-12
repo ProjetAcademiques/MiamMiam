@@ -14,11 +14,22 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/liste')]
 final class ListeController extends AbstractController
 {
-    #[Route(name: 'app_liste_index', methods: ['GET'])]
-    public function index(ListeRepository $listeRepository): Response
+    #[Route(name: 'app_liste_index', methods: ['GET', 'POST'])]
+    public function index(Request $request, ListeRepository $listeRepository, EntityManagerInterface $entityManager): Response
     {
+        $liste = new Liste();
+        $form = $this->createForm(ListeType::class, $liste);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($liste);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
+        }
         return $this->render('liste/index.html.twig', [
             'listes' => $listeRepository->findAll(),
+            'form' => $form->createView(),
         ]);
     }
 

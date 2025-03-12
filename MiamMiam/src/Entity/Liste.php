@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ListeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Utilisateur;
 
 #[ORM\Entity(repositoryClass: ListeRepository::class)]
 class Liste
@@ -27,7 +28,8 @@ class Liste
     public function __construct()
     {
         $this->DateDeCreation = new \DateTime();
-        $this->creePar = ;
+
+;
     }
     public function getId(): ?int
     {
