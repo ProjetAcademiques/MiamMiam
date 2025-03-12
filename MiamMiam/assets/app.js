@@ -6,6 +6,10 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
+<<<<<<< HEAD
 import './styles/app.css';
 import './styles/header.css';
 import './styles/footer.css';
+=======
+import './styles/login.css';
+>>>>>>> feature/auth
