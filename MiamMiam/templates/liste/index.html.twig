@@ -9,27 +9,43 @@
 {% endblock %}
 
 {% block body %}
-<main>
+
+    <h1>Mes listes de courses</h1>
+
+    <main>
+
         {{ include('liste/_form.html.twig') }}
-        <tbody>
-        {% for liste in listes %}
-            <div id="test">
-                <h2>Liste {{ liste.id }}</h2>
-            
-                <h3>Nom</h3>
-                <p>{{ liste.nom }}</p>
-            
-                <h3>DateDeCreation</h3>
-                <p>{{ liste.DateDeCreation ? liste.DateDeCreation|date('Y-m-d') : '' }}</p>
 
-                <h3>{{ include('liste/_delete_form.html.twig') }}</h3>
-            </div>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
+        <div class="flex-lists">
+            {% for liste in listes %}
+                <div class="list">
+                    <h2>{{ liste.nom }}</h2>
 
-</main>
+                    <div class="list-container">
+
+                        <div class="list-articles">
+                            {% for article in articlesParListe[liste.id] %}
+                                <div class="article">
+                                    <p>{{ article.nom }} - {{ article.quantitee }} unités - {{ article.prix }} €</p>
+                                </div>
+                            {% else %}
+                                <p>Aucun article dans cette liste.</p>
+                            {% endfor %}
+                        </div>
+
+                        <span class="list-separator"></span>
+
+                        {{ include('liste/_delete_form.html.twig') }}
+                    </div>
+                </div>
+
+            {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+            {% endfor %}
+
+        </div>
+
+    </main>
 {% endblock %}

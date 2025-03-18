@@ -20,6 +20,7 @@ body {
     padding: 0;
 }
 .main {
+    box-sizing: border-box;
     margin-left: 15rem;
     height: 100%;
 }
@@ -28,7 +29,7 @@ main {
     box-sizing: border-box;
     background-color: var(--white);
     margin: 1rem;
-    padding: 0.1rem 1rem;
+    padding: 1rem 1rem;
     min-height: calc(100vh - 10.5rem);
     border-radius: 1rem;
 }

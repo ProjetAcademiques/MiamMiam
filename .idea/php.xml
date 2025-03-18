@@ -142,6 +142,7 @@
       <path value="$PROJECT_DIR$/MiamMiam/vendor/symfony/css-selector" />
       <path value="$PROJECT_DIR$/MiamMiam/vendor/symfony/deprecation-contracts" />
       <path value="$PROJECT_DIR$/MiamMiam/vendor/symfony/dependency-injection" />
+      <path value="$PROJECT_DIR$/MiamMiam/vendor/symfony/asset-mapper" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />

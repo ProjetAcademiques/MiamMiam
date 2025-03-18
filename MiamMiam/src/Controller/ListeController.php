@@ -27,8 +27,17 @@ final class ListeController extends AbstractController
 
             return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
         }
+
+        $listes = $listeRepository->findAll();
+        $articlesParListe = [];
+
+        foreach ($listes as $liste) {
+            $articlesParListe[$liste->getId()] = $listeRepository->getArticlesByListeId($liste->getId());
+        }
+
         return $this->render('liste/index.html.twig', [
-            'listes' => $listeRepository->findAll(),
+            'listes' => $listes,
+            'articlesParListe' => $articlesParListe,
             'form' => $form->createView(),
         ]);
     }
