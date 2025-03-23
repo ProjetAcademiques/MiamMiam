@@ -9,18 +9,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ListeType extends AbstractType
+class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom')
+            ->add('email')
+            ->add('roles')
+            ->add('password')
+            ->add('pseudo')
             ->add('date_creation', null, [
                 'widget' => 'single_text',
             ])
-            ->add('periode')
-            ->add('users', EntityType::class, [
-                'class' => User::class,
+            ->add('is_admin')
+            ->add('listes', EntityType::class, [
+                'class' => Liste::class,
                 'choice_label' => 'id',
                 'multiple' => true,
             ])
@@ -30,7 +33,7 @@ class ListeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Liste::class,
+            'data_class' => User::class,
         ]);
     }
 }

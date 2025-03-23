@@ -16,8 +16,12 @@
                 <td>{{ liste.nom }}</td>
             </tr>
             <tr>
-                <th>DateDeCreation</th>
-                <td>{{ liste.DateDeCreation ? liste.DateDeCreation|date('Y-m-d') : '' }}</td>
+                <th>Date_creation</th>
+                <td>{{ liste.dateCreation ? liste.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Periode</th>
+                <td>{{ liste.periode }}</td>
             </tr>
         </tbody>
     </table>

@@ -10,7 +10,8 @@
             <tr>
                 <th>Id</th>
                 <th>Nom</th>
-                <th>DateDeCreation</th>
+                <th>Date_creation</th>
+                <th>Periode</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -19,7 +20,8 @@
             <tr>
                 <td>{{ liste.id }}</td>
                 <td>{{ liste.nom }}</td>
-                <td>{{ liste.DateDeCreation ? liste.DateDeCreation|date('Y-m-d') : '' }}</td>
+                <td>{{ liste.dateCreation ? liste.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ liste.periode }}</td>
                 <td>
                     <a href="{{ path('app_liste_show', {'id': liste.id}) }}">show</a>
                     <a href="{{ path('app_liste_edit', {'id': liste.id}) }}">edit</a>
@@ -27,7 +29,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="5">no records found</td>
             </tr>
         {% endfor %}
         </tbody>

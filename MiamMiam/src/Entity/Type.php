@@ -19,9 +19,9 @@ class Type
     private ?string $nom = null;
 
     /**
-     * @var Collection<int, Articles>
+     * @var Collection<int, Article>
      */
-    #[ORM\ManyToMany(targetEntity: Articles::class, inversedBy: 'types')]
+    #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'Type')]
     private Collection $articles;
 
     public function __construct()
@@ -47,14 +47,14 @@ class Type
     }
 
     /**
-     * @return Collection<int, Articles>
+     * @return Collection<int, Article>
      */
     public function getArticles(): Collection
     {
         return $this->articles;
     }
 
-    public function addArticle(Articles $article): static
+    public function addArticle(Article $article): static
     {
         if (!$this->articles->contains($article)) {
             $this->articles->add($article);
@@ -63,7 +63,7 @@ class Type
         return $this;
     }
 
-    public function removeArticle(Articles $article): static
+    public function removeArticle(Article $article): static
     {
         $this->articles->removeElement($article);
 

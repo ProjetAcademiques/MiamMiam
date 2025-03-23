@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Articles;
+use App\Entity\Article;
 use App\Entity\Magasin;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -16,7 +16,7 @@ class MagasinType extends AbstractType
         $builder
             ->add('nom')
             ->add('articles', EntityType::class, [
-                'class' => Articles::class,
+                'class' => Article::class,
                 'choice_label' => 'id',
                 'multiple' => true,
             ])

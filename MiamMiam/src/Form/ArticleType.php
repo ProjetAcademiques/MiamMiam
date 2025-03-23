@@ -2,25 +2,28 @@
 
 namespace App\Form;
 
-use App\Entity\Liste;
-use App\Entity\User;
+use App\Entity\Article;
+use App\Entity\Magasin;
+use App\Entity\Type;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ListeType extends AbstractType
+class ArticleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('nom')
-            ->add('date_creation', null, [
-                'widget' => 'single_text',
+            ->add('prix')
+            ->add('type', EntityType::class, [
+                'class' => Type::class,
+                'choice_label' => 'id',
+                'multiple' => true,
             ])
-            ->add('periode')
-            ->add('users', EntityType::class, [
-                'class' => User::class,
+            ->add('magasin', EntityType::class, [
+                'class' => Magasin::class,
                 'choice_label' => 'id',
                 'multiple' => true,
             ])
@@ -30,7 +33,7 @@ class ListeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Liste::class,
+            'data_class' => Article::class,
         ]);
     }
 }

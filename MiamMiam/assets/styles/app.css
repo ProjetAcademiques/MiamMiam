@@ -1,3 +1,42 @@
+:root {
+    --black: #455551;
+    --white: #FFFFFF;
+    --green: #79A18B;
+    --lightGreen: #CFE8D5;
+    --magenta: #93555A;
+}
+
+html {
+    color: var(--black);
+    font-family: Montserrat, sans-serif;
+    font-size: 16px;
+}
+
 body {
-    background-color: lightgray;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--lightGreen);
+    margin: 0;
+    padding: 0;
+}
+.main {
+    box-sizing: border-box;
+    margin-left: 15rem;
+    height: 100%;
+}
+main {
+    display: block;
+    box-sizing: border-box;
+    background-color: var(--white);
+    margin: 1rem;
+    padding: 1rem 1rem;
+    min-height: calc(100vh - 10.5rem);
+    border-radius: 1rem;
+}
+h1 {
+    font-size: clamp(1.75rem, calc(1.75rem + 0.75vw), 2rem);
+    margin: 1rem 0 0 1rem;
+    height: 2.5rem;
+    padding: 0;
+    color: var(--magenta);
 }
