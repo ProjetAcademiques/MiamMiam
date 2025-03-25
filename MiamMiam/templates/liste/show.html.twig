@@ -4,25 +4,23 @@
 
 {% block body %}
     <h1>Liste</h1>
-
+    <main>
     <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ liste.id }}</td>
-            </tr>
+        <thead>
             <tr>
                 <th>Nom</th>
-                <td>{{ liste.nom }}</td>
+                <th>Quantité</th>
+                <th>Date d'ajout</th>
             </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
             <tr>
-                <th>Date_creation</th>
-                <td>{{ liste.dateCreation ? liste.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ article[0].nom }}</td>
+                <td>{{ article.quantite }}</td>
+                <td>{{ article.date_ajout|date('Y-m-d H:i:s') }}</td>
             </tr>
-            <tr>
-                <th>Periode</th>
-                <td>{{ liste.periode }}</td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 
@@ -31,4 +29,5 @@
     <a href="{{ path('app_liste_edit', {'id': liste.id}) }}">edit</a>
 
     {{ include('liste/_delete_form.html.twig') }}
+    </main>
 {% endblock %}

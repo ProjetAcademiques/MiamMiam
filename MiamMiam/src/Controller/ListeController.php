@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Liste;
+use App\Entity\Article;
 use App\Form\ListeType;
 use App\Repository\ListeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,10 +44,21 @@ final class ListeController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_liste_show', methods: ['GET'])]
-    public function show(Liste $liste): Response
+    public function show(Liste $liste, EntityManagerInterface $entityManager): Response
     {
+        $query = $entityManager->createQuery(
+            'SELECT a, la.quantite, la.date_ajout
+             FROM App\Entity\Article a
+             JOIN App\Entity\ListeArticle la WITH la.article = a
+             JOIN App\Entity\Liste l WITH la.liste = l
+             WHERE l.id = :listeId'
+        )->setParameter('listeId', $liste->getId());
+
+        $articles = $query->getResult();
+
         return $this->render('liste/show.html.twig', [
             'liste' => $liste,
+            'articles' => $articles
         ]);
     }
 
