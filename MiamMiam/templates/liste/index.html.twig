@@ -2,38 +2,49 @@
 
 {% block title %}Liste index{% endblock %}
 
+{%block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('app') }}
+    <link rel="stylesheet" href="{{ asset('build/css/liste.css') }}">
+{% endblock %}
+
 {% block body %}
-    <h1>Liste index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Date_creation</th>
-                <th>Periode</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for liste in listes %}
-            <tr>
-                <td>{{ liste.id }}</td>
-                <td>{{ liste.nom }}</td>
-                <td>{{ liste.dateCreation ? liste.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ liste.periode }}</td>
-                <td>
-                    <a href="{{ path('app_liste_show', {'id': liste.id}) }}">show</a>
-                    <a href="{{ path('app_liste_edit', {'id': liste.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <h1>Mes listes de courses</h1>
 
-    <a href="{{ path('app_liste_new') }}">Create new</a>
+    <main>
+
+        {{ include('liste/_form.html.twig') }}
+
+        <div class="flex-lists">
+            {% for liste in listes %}
+                <div class="list">
+                    <h2>{{ liste.nom }}</h2>
+
+                    <div class="list-container">
+
+                        <ul class="list-articles">
+                            {% for article in articlesParListe[liste.id] %}
+                                <li class="info-article">
+                                    <div>{{ article.nom }}</div>
+                                    <div>{{ article.prix }}€ | x{{ article.quantite }}</div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                        <span class="list-separator"></span>
+
+                        {{ include('liste/_delete_form.html.twig') }}
+                    </div>
+                </div>
+
+            {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+            {% endfor %}
+
+        </div>
+
+    </main>
 {% endblock %}

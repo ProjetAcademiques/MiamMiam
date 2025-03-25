@@ -25,7 +25,7 @@ class Liste
     /**
      * @var Collection<int, ListeArticle>
      */
-    #[ORM\OneToMany(targetEntity: ListeArticle::class, mappedBy: 'id_liste', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: ListeArticle::class, mappedBy: 'liste', orphanRemoval: true)]
     private Collection $liste_article;
 
     /**

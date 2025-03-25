@@ -16,6 +16,18 @@ class ListeRepository extends ServiceEntityRepository
         parent::__construct($registry, Liste::class);
     }
 
+    public function findArticlesByListeId(int $listeId): array
+    {
+        return $this->createQueryBuilder('l')
+            ->select('a.id, a.nom, a.prix, la.quantite, la.date_ajout')
+            ->join('l.liste_article', 'la')
+            ->join('la.article', 'a')
+            ->where('l.id = :listeId')
+            ->setParameter('listeId', $listeId)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Liste[] Returns an array of Liste objects
 //     */

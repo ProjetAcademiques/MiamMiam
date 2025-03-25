@@ -11,14 +11,34 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/liste')]
+#[Route('/')]
 final class ListeController extends AbstractController
 {
-    #[Route(name: 'app_liste_index', methods: ['GET'])]
-    public function index(ListeRepository $listeRepository): Response
+    #[Route(name: 'app_liste_index', methods: ['GET', 'POST'])]
+    public function index(Request $request, ListeRepository $listeRepository, EntityManagerInterface $entityManager): Response
     {
+        $liste = new Liste();
+        $form = $this->createForm(ListeType::class, $liste);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($liste);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        $listes = $listeRepository->findAll();
+        $articlesParListe = [];
+
+        foreach ($listes as $liste) {
+            $articlesParListe[$liste->getId()] = $listeRepository->findArticlesByListeId($liste->getId());
+        }
+
         return $this->render('liste/index.html.twig', [
-            'listes' => $listeRepository->findAll(),
+            'listes' => $listes,
+            'articlesParListe' => $articlesParListe,
+            'form' => $form->createView(),
         ]);
     }
 
