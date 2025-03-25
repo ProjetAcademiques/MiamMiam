@@ -6,6 +6,7 @@ use App\Entity\Liste;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,9 +24,15 @@ class ListeType extends AbstractType
                 'class' => User::class,
                 'choice_label' => 'id',
                 'multiple' => true,
+            ->add('nom', TextType::class, [
+                'attr' => [
+                    'placeholder' => 'Nom de la liste...'
+                ],
+                'label' => false
             ])
         ;
     }
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {

@@ -1,4 +1,13 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
     <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'form-new-list'}}) }}
+<div class="form-new-list">
+    {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+    <button class="bt-new-list">
+        <span class="new-list-icon"></span>
+        {{ button_label|default('Créer une nouvelle liste') }}
+    </button>
+</div>
+
 {{ form_end(form) }}
