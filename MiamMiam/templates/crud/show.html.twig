@@ -1,0 +1,212 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}GestionCrud
+{% endblock %}
+{%block stylesheets %}
+	{{ parent() }}
+	{{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block body %}
+	<main>
+		<div class="GestionCrud">
+			<div class="GestionTableaux">
+				<h2>Gestion des CRUD</h2>
+				<ul class="nav nav-tabs" id="crudtabs">
+					<li class="nav-item">
+						<a class="nav-link active" href="#articles" data-bs-toggle="tab">Articles</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#listes" data-bs-toggle="tab">Listes</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#magasins" data-bs-toggle="tab">Magasins</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#utilisateurs" data-bs-toggle="tab">Utilisateurs</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#types" data-bs-toggle="tab">Types</a>
+					</li>
+				</ul>
+				<div class="tab-content mt-3" id="ContenuTableaux">
+					<div id="articles" class="tab-pane fade show active">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Id</th>
+									<th>Nom</th>
+									<th>Prix</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for article in articles %}
+									<tr>
+										<td>{{ article.id }}</td>
+										<td>{{ article.nom }}</td>
+										<td>{{ article.prix }}</td>
+										<td>
+											<form method="post" action="{{ path('app_delete', {'id': article.id, 'EntityName': 'article'}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');" style="display:inline;">
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+												<button class="btn btn-danger" type="submit">
+													supprimer
+												</button>
+											</form>
+											<a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn btn-secondary">
+												editer
+											</a>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+						<a href="{{ path('app_article_new') }}" class="btn btn-primary">Ajouter un article</a>
+					</div>
+					<div id="listes" class="tab-pane fade">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Id</th>
+									<th>Nom</th>
+									<th>Date Création</th>
+									<th>créateur(s)</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for liste in listes%}
+									<tr>
+										<td>{{ liste.id }}</td>
+										<td>{{ liste.nom }}</td>
+										<td>{{ liste.dateCreation|date('d/m/Y') }}</td>
+										<td>
+											{% if liste.users|length > 0 %}
+												{% for user in liste.users %}
+													{{ user.pseudo }}
+													{% if not loop.last %},
+													{% endif %}
+												{% endfor %}
+											{% else %}
+												No users
+											{% endif %}
+										</td>
+										<td>
+											<form method="post" action="{{ path('app_delete', {'id': liste.id, 'EntityName':'liste'}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');" style="display:inline;">
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ liste.id) }}">
+												<button class="btn btn-danger" type="submit">
+													supprimer
+												</button>
+											</form>
+											<a href="{{ path('app_liste_edit', {'id': liste.id}) }}" class="btn btn-secondary">
+												editer
+											</a>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+					<div id="magasins" class="tab-pane fade">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Id</th>
+									<th>Nom</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for magasin in magasins%}
+									<tr>
+										<td>{{ magasin.id }}</td>
+										<td>{{ magasin.nom }}</td>
+										<td>
+											<form method="post" action="{{ path('app_delete', {'id': magasin.id, 'EntityName':'magasin'}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');" style="display:inline;">
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ magasin.id) }}">
+												<button class="btn btn-danger" type="submit">
+													supprimer
+												</button>
+											</form>
+											<a href="{{ path('app_magasin_edit', {'id': magasin.id}) }}" class="btn btn-secondary">
+												editer
+											</a>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+						<a href="{{ path('app_magasin_new') }}" class="btn btn-primary">Ajouter un magasin</a>
+					</div>
+					<div id="utilisateurs" class="tab-pane fade">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Id</th>
+									<th>Pseudo</th>
+									<th>AddresseMail</th>
+									<th>MotDePasse</th>
+									<th>DateCreation</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for utilisateur in utilisateurs%}
+									<tr>
+										<td>{{ utilisateur.id }}</td>
+										<td>{{ utilisateur.pseudo }}</td>
+										<td>{{ utilisateur.email }}</td>
+										<td>{{ utilisateur.password }}</td>
+										<td>{{ utilisateur.dateCreation|date('d/m/Y') }}</td>
+										<td>
+											<form method="post" action="{{ path('app_delete', {'id': utilisateur.id, 'EntityName':'user'}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');" style="display:inline;">
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ utilisateur.id) }}">
+												<button class="btn btn-danger" type="submit">
+													supprimer
+												</button>
+											</form>
+											<a href="{{ path('app_user_edit', {'id': utilisateur.id}) }}" class="btn btn-secondary">
+												editer
+											</a>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+					<div id="types" class="tab-pane fade">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Id</th>
+									<th>Nom</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for type in types%}
+									<tr>
+										<td>{{ type.id }}</td>
+										<td>{{ type.nom}}</td>
+										<td>
+											<form method="post" action="{{ path('app_delete', {'id': type.id, 'EntityName':'type'}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');" style="display:inline;">
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ type.id) }}">
+												<button class="btn btn-danger" type="submit">
+													supprimer
+												</button>
+											</form>
+											<a href="{{ path('app_type_edit', {'id': type.id}) }}" class="btn btn-secondary">
+												editer
+											</a>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+						<a href="{{ path('app_type_new') }}" class="btn btn-primary">Ajouter un type</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+{% endblock %}

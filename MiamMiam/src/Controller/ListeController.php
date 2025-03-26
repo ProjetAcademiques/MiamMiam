@@ -16,8 +16,6 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/')]
 final class ListeController extends AbstractController
 {
-    #[Route(name: 'app_liste_index', methods: ['GET'])]
-    public function index(ListeRepository $listeRepository): Response
     #[Route(name: 'app_liste_index', methods: ['GET', 'POST'])]
     public function index(Request $request, ListeRepository $listeRepository, EntityManagerInterface $entityManager): Response
     {

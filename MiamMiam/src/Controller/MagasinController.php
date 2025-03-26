@@ -33,7 +33,7 @@ final class MagasinController extends AbstractController
             $entityManager->persist($magasin);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_magasin_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('magasin/new.html.twig', [
@@ -59,7 +59,7 @@ final class MagasinController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_magasin_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('magasin/edit.html.twig', [
@@ -76,6 +76,6 @@ final class MagasinController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_magasin_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
     }
 }

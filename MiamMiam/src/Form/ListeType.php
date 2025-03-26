@@ -15,7 +15,12 @@ class ListeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom')
+            ->add('nom', TextType::class, [
+                'attr' => [
+                    'placeholder' => 'Nom de la liste...'
+                ],
+                'label' => false
+            ])
             ->add('date_creation', null, [
                 'widget' => 'single_text',
             ])
@@ -24,11 +29,6 @@ class ListeType extends AbstractType
                 'class' => User::class,
                 'choice_label' => 'id',
                 'multiple' => true,
-            ->add('nom', TextType::class, [
-                'attr' => [
-                    'placeholder' => 'Nom de la liste...'
-                ],
-                'label' => false
             ])
         ;
     }

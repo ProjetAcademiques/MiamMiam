@@ -33,7 +33,7 @@ final class TypeController extends AbstractController
             $entityManager->persist($type);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_type_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('type/new.html.twig', [
@@ -59,7 +59,7 @@ final class TypeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_type_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('type/edit.html.twig', [
@@ -76,6 +76,6 @@ final class TypeController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_type_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
     }
 }

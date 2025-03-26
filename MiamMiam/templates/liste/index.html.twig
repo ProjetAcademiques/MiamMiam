@@ -1,35 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste index{% endblock %}
+{% block title %}Liste index
+{% endblock %}
 
 {%block stylesheets %}
-    {{ parent() }} 
-    {{ encore_entry_link_tags('app') }}
-    <link rel="stylesheet" href="{{ asset('build/css/liste.css') }}">
+	{{ parent() }}
+	{{ encore_entry_link_tags('app') }}
+	<link rel="stylesheet" href="{{ asset('build/css/liste.css') }}">
 {% endblock %}
 
 {% block body %}
-<main>
-        {{ include('liste/_form.html.twig') }}
-        <tbody>
-        {% for liste in listes %}
-            <div id="test">
-                <h2>Liste {{ liste.id }}</h2>
-            
-                <h3>Nom</h3>
-                <p>{{ liste.nom }}</p>
-            
-                <h3>DateDeCreation</h3>
-                <p>{{ liste.DateDeCreation ? liste.DateDeCreation|date('Y-m-d') : '' }}</p>
+	<main>
+		{{ include('liste/_form.html.twig') }}
+		<tbody>
+			{% for liste in listes %}
+				<div id="test">
+					<h2>Liste
+						{{ liste.id }}</h2>
 
-                <h3>{{ include('liste/_delete_form.html.twig') }}</h3>
-            </div>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
+					<h3>Nom</h3>
+					<p>{{ liste.nom }}</p>
 
-</main>
+					<h3>DateDeCreation</h3>
+					<p>{{ liste.dateCreation ? liste.dateCreation|date('Y-m-d') : '' }}</p>
+
+					<h3>{{ include('liste/_delete_form.html.twig') }}</h3>
+				</div>
+			{% else %}
+				<tr>
+					<td colspan="4">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+
+	</main>
 {% endblock %}
