@@ -14,22 +14,24 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class RegistrationController extends AbstractController
 {
     private $tokenStorage;
-    private $session;
-    public function __construct(TokenStorageInterface $tokenStorage, SessionInterface $session)
+    private $requestStack;
+
+    public function __construct(TokenStorageInterface $tokenStorage, RequestStack $requestStack)
     {
         $this->tokenStorage = $tokenStorage;
-        $this->session = $session;
+        $this->requestStack = $requestStack;
     }
 
 
     #[Route('/registerForm', name: 'app_register')]
     public function registerForm(Request $request,EntityManagerInterface $entityManager):Response
     {
+        $session = $this->requestStack->getSession();
         $session = $request->getSession();
         $email = $session->get('email');
         $password = $session->get('password');
@@ -49,9 +51,11 @@ class RegistrationController extends AbstractController
         $entityManager->flush();
         $session->remove('email');
         $session->remove('password');
-        $token = new UsernamePasswordToken($utilisateur,'main', $utilisateur->getRoles());
+
+        $token = new UsernamePasswordToken($utilisateur, 'main', $utilisateur->getRoles());
         $this->tokenStorage->setToken($token);
-        $this->session->set('_security_main', serialize($token));
+        $session->set('_security_main', serialize($token));
+
         return $this->redirectToRoute('app_article_new');
 }
 
