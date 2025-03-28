@@ -40,7 +40,9 @@ security:
         - { path: ^/pastregister}
         - { path: ^/loginForm}
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/, roles: ROLE_USER }
+        - { path: ^/crud,  roles: ROLE_ADMIN}
+        - { path: ^/}
+        
 
 when@test:
     security:

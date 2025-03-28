@@ -67,7 +67,7 @@ class SecurityController extends AbstractController
     }
     #[Route('/')]
     public function redirectListe(): Response{
-        return $this->redirectToRoute('app_liste_index');
+        return $this->redirectToRoute('login_page');
     }
 
 }
