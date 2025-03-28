@@ -38,7 +38,6 @@ final class ListeController extends AbstractController
         }
 
         return $this->render('liste/index.html.twig', [
-            'listes' => $listeRepository->findAll(),
             'listes' => $listes,
             'articlesParListe' => $articlesParListe,
             'form' => $form->createView(),
