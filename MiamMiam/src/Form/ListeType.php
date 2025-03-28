@@ -21,15 +21,6 @@ class ListeType extends AbstractType
                 ],
                 'label' => false
             ])
-            ->add('date_creation', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('periode')
-            ->add('users', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
         ;
     }
 
