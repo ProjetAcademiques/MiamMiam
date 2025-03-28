@@ -23,10 +23,14 @@
 			{{ encore_entry_script_tags('app') }}
 		{% endblock %}
 	</head>
-	<body>
-		{% include 'components/header.html.twig' %}
-		<div class="main"> {% block body %}{% endblock %}
-			</div>
+		<body>
+			{% if app.user %}
+				{% include 'components/header.html.twig'%}
+			{% endif %}
+			<div class="main"> {% block body %}{% endblock %}
+				</div>
 		</body>
-		{% include 'components/footer.html.twig' %}
+		{% if app.user %}
+			{% include 'components/footer.html.twig' %}	
+		{% endif %}
 	</html>
