@@ -41,6 +41,7 @@ class Liste
     {
         $this->liste_article = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->date_creation = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
