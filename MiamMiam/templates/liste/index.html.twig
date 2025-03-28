@@ -19,7 +19,7 @@
 
         <div class="flex-lists">
             {% for liste in listes %}
-                <div class="list">
+                <div class="list" onclick="window.location.href='/miammiam/MiamMiam/public/index.php/liste/{{ liste.id }}'">
                     <h2>{{ liste.nom }}</h2>
 
                     <div class="list-container">
