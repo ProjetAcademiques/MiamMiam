@@ -11,4 +11,3 @@ import "./styles/header.css";
 import "./styles/footer.css";
 import "./styles/login.css";
 import "./styles/liste.css";
-import "./styles/crud.css";

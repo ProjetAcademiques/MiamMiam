@@ -62,8 +62,12 @@ class SecurityController extends AbstractController
         $token = new UsernamePasswordToken($utilisateur, 'main', $utilisateur->getRoles());
         $this->tokenStorage->setToken($token);
         $session->set('_security_main', serialize($token));
-        return $this->redirectToRoute('app_article_new');
+        return $this->redirectToRoute('app_liste_index');
 
+    }
+    #[Route('/')]
+    public function redirectListe(): Response{
+        return $this->redirectToRoute('app_liste_index');
     }
 
 }

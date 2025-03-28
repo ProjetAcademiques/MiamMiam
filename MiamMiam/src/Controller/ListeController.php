@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/liste')]
-#[Route('/')]
 final class ListeController extends AbstractController
 {
     #[Route(name: 'app_liste_index', methods: ['GET', 'POST'])]
@@ -111,4 +110,5 @@ final class ListeController extends AbstractController
 
         return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
     }
+    
 }

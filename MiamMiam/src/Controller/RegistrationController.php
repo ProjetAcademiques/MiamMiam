@@ -46,7 +46,7 @@ class RegistrationController extends AbstractController
         $utilisateur->setPassword($hashedPassword);
         $utilisateur->setDateCreation(new \DateTime());
         $utilisateur->setIsAdmin(false);
-        $utilisateur->setRoles(['User']);
+        $utilisateur->setRoles([]);
         $entityManager->persist($utilisateur);
         $entityManager->flush();
         $session->remove('email');
@@ -56,7 +56,7 @@ class RegistrationController extends AbstractController
         $this->tokenStorage->setToken($token);
         $session->set('_security_main', serialize($token));
 
-        return $this->redirectToRoute('app_article_new');
+        return $this->redirectToRoute('app_liste_index');
 }
 
     #[Route('/pastregister', name: 'app_past_register')]
