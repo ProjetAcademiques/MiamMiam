@@ -42,6 +42,7 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/crud,  roles: ROLE_ADMIN}
         - { path: ^/}
+        - {path: ^/liste, roles: IS_AUTHENTICATED_FULLY}
         
 
 when@test:
