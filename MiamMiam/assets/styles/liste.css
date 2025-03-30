@@ -5,7 +5,7 @@
     gap: 1rem;
     justify-content: start;
 }
-#liste_nom.form-control {
+#liste_nom {
     box-sizing: border-box;
     width: 20rem;
     height: 2rem;
@@ -23,6 +23,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    border: 0;
 }
 .new-list-icon {
     display: inline-block;
@@ -67,16 +68,49 @@
     gap: 1rem;
     padding-bottom: 1rem;
 }
+.list-articles {
+    list-style: none;
+    padding: 1rem;
+    margin: 0;
+    color: var(--magenta);
+}
+.info-article {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    justify-content: space-between;
+    gap: 1rem;
+}
 .list-separator {
     display: block;
     height: 1px;
     width: 100%;
     background-color: var(--magenta);
 }
+.nb-articles {
+    color: var(--magenta);
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+.bt-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    width: calc(100% - 2rem);
+    border-radius: 0.75rem;
+    border: none;
+    text-decoration: none;
+    text-align: center;
+    margin-left: 1rem;
+    background-color: var(--green);
+    color: var(--white);
+}
 .bt-del-list {
     height: 2rem;
     width: calc(100% - 2rem);
     border-radius: 0.75rem;
+    border: none;
     background-color: var(--magenta);
     color: var(--white);
 }

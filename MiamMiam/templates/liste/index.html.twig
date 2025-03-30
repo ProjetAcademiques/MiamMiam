@@ -18,14 +18,17 @@
 
 		<div class="flex-lists">
 			{% for liste in listes %}
-				<a class="list" href="{{ path('app_liste_show', {'id': liste.id}) }}">
+				<div class="list">
 
 					<h2>{{ liste.nom }}</h2>
 
 					<div class="list-container">
 
 						<ul class="list-articles">
-							{% for article in articlesParListe[liste.id] %}
+							{% set articles = articlesParListe[liste.id] %}
+							{% set nbArticles = nbArticlesParListe[liste.id] %}
+
+							{% for article in (nbArticles <= 3 ? articles : articles|slice(0, 3)) %}
 								<li class="info-article">
 									<div>{{ article.nom }}</div>
 									<div>{{ article.prix }}€ | x{{ article.quantite }}</div>
@@ -35,9 +38,15 @@
 
 						<span class="list-separator"></span>
 
+						<p class="nb-articles"> + {{ nbArticlesParListe[liste.id]-3 }} article(s)</p>
+
+						<span class="list-separator"></span>
+
+						<a class="bt-list" href="{{ path('app_liste_show', {'id': liste.id}) }}">Voir le détail</a>
+
 						{{ include('liste/_delete_form.html.twig') }}
 					</div>
-				</a>
+				</div>
 
 			{% else %}
 				<tr>

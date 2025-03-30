@@ -37,11 +37,13 @@ final class ListeController extends AbstractController
 
         foreach ($listes as $liste) {
             $articlesParListe[$liste->getId()] = $listeRepository->findArticlesByListeId($liste->getId());
+            $nbArticlesParListe[$liste->getId()] = count($articlesParListe[$liste->getId()]);
         }
 
         return $this->render('liste/index.html.twig', [
             'listes' => $listes,
             'articlesParListe' => $articlesParListe,
+            'nbArticlesParListe' => $nbArticlesParListe,
             'form' => $form->createView(),
         ]);
     }
