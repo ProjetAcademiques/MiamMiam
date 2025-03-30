@@ -1,45 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User index{% endblock %}
+{% block title %}User
+{% endblock %}
 
 {% block body %}
-    <h1>User index</h1>
+	<h1>utilisateur</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Email</th>
-                <th>Roles</th>
-                <th>Password</th>
-                <th>Pseudo</th>
-                <th>Date_creation</th>
-                <th>Is_admin</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>{{ user.password }}</td>
-                <td>{{ user.pseudo }}</td>
-                <td>{{ user.dateCreation ? user.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ user.isAdmin ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_user_new') }}">Create new</a>
+	<main>
+		<table class="table">
+			<tbody>
+				<tr>
+					<th>Email</th>
+					<td>{{ user.email }}</td>
+				</tr>
+				<tr>
+					<th>Pseudo</th>
+					<td>{{ user.pseudo }}</td>
+				</tr>
+				<tr>
+					<th>Date de création</th>
+					<td>{{ user.dateCreation ? user.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+				</tr>
+				<tr>
+					<th>Admin</th>
+					<td>{{ user.isAdmin ? 'Oui' : 'Non' }}</td>
+				</tr>
+			</tbody>
+		</table>
+		<a href="{{ path('app_user_edit', {'id': user.id}) }}">Modifier</a>
+		{{ include('user/_delete_form.html.twig') }}
+	</main>
 {% endblock %}

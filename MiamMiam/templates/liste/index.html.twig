@@ -4,49 +4,49 @@
 {% endblock %}
 
 {%block stylesheets %}
-    {{ parent() }}
-    {{ encore_entry_link_tags('app') }}
-    <link rel="stylesheet" href="{{ asset('build/css/liste.css') }}">
+	{{ parent() }}
+	{{ encore_entry_link_tags('app') }}
 {% endblock %}
 
 {% block body %}
 
-    <h1>Mes listes de courses</h1>
+	<h1>Mes listes de courses</h1>
 
-    <main>
+	<main>
 
-        {{ include('liste/_form.html.twig') }}
+		{{ include('liste/_form.html.twig') }}
 
-        <div class="flex-lists">
-            {% for liste in listes %}
-                <div class="list" onclick="window.location.href='/miammiam/MiamMiam/public/index.php/liste/{{ liste.id }}'">
-                    <h2>{{ liste.nom }}</h2>
+		<div class="flex-lists">
+			{% for liste in listes %}
+				<a class="list" href="{{ path('app_liste_show', {'id': liste.id}) }}">
 
-                    <div class="list-container">
+					<h2>{{ liste.nom }}</h2>
 
-                        <ul class="list-articles">
-                            {% for article in articlesParListe[liste.id] %}
-                                <li class="info-article">
-                                    <div>{{ article.nom }}</div>
-                                    <div>{{ article.prix }}€ | x{{ article.quantite }}</div>
-                                </li>
-                            {% endfor %}
-                        </ul>
+					<div class="list-container">
 
-                        <span class="list-separator"></span>
+						<ul class="list-articles">
+							{% for article in articlesParListe[liste.id] %}
+								<li class="info-article">
+									<div>{{ article.nom }}</div>
+									<div>{{ article.prix }}€ | x{{ article.quantite }}</div>
+								</li>
+							{% endfor %}
+						</ul>
 
-                        {{ include('liste/_delete_form.html.twig') }}
-                    </div>
-                </div>
+						<span class="list-separator"></span>
 
-            {% else %}
-                <tr>
-                    <td colspan="4">no records found</td>
-                </tr>
-            {% endfor %}
+						{{ include('liste/_delete_form.html.twig') }}
+					</div>
+				</a>
 
-        </div>
+			{% else %}
+				<tr>
+					<td colspan="4">Aucune liste</td>
+				</tr>
+			{% endfor %}
+
+		</div>
 
 
-    </main>
+	</main>
 {% endblock %}

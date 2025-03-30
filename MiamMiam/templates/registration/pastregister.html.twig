@@ -1,25 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}Inscription
+{% endblock %}
 
 {% block body %}
-    <div class="Inscription">
-        <div class="RedirectionConnexionForm">
-            <h2>Vous avez déjà un compte?</h2>       
-                <a href="{{ path('login_page') }}" class="btn">Se connecter</a>
-        </div>
-        <div class="InscriptionForm">
-            <h2>S'inscrire</h2>
-            <form action="{{ path('app_save_form')}}" method="POST">
-                <label for="E-mail">E-mail*</label>
-                <input type="email" name="email" id="E-mail" required>
-                <label for="Password">Mot de passe*</label>
-                <input type="password" name="password" id="Password" required>
-                <label for="PasswordConfirm">Confirmation mot de passe*</label>
-                <input type="password" name="passwordConfirm" id="PasswordConfirm" required>
-                <button type="submit">S'inscrire</button> 
-            </form>
-            <p id="champs_obli">*Champs obligatoires</p>
-        </div>
-    </div>
+	<div class="Inscription">
+		<div class="RedirectionConnexionForm">
+			<h2>Vous avez déjà un compte?</h2>
+			<a href="{{ path('login_page') }}" class="btn">Se connecter</a>
+		</div>
+		<div class="InscriptionForm">
+			<h2>S'inscrire</h2>
+			<form action="{{ path('app_save_form')}}" method="POST">
+				<label for="E-mail">E-mail*</label>
+				<input type="email" name="email" id="E-mail" required>
+				<label for="Password">Mot de passe*</label>
+				<input type="password" name="password" id="Password" required>
+				<label for="PasswordConfirm">Confirmation mot de passe*</label>
+				<input type="password" name="passwordConfirm" id="PasswordConfirm" required>
+				<button class="rl" type="submit">S'inscrire</button>
+			</form>
+			<p id="champs_obli">*Champs obligatoires</p>
+		</div>
+	</div>
 {% endblock %}

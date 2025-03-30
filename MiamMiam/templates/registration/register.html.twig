@@ -1,20 +1,20 @@
 {% extends 'base.html.twig' %}
-{% block title %}FinalisationInscription{% endblock %}
-{% block body %}
-<div class="Inscription">
-    <div class="RedirectionConnexionForm">
-        <h2>Vous n'avez pas encore de compte?</h2>       
-            <a href="{{ path('login_page') }}" class="btn">Se connecter</a>
-    </div>
-    <div class="InscriptionForm">
-        <h2>Choisir un pseudonyme</h2>
-        <form action="{{path('app_register')}}" method="POST">
-            <label for="Pseudonyme">pseudonyme*</label>
-            <input type="text" name="pseudonyme" id="Pseudonyme" required>
-            <button type="submit">Finalisation de l'Inscription</button> 
-        </form>
-        <p id="champs_obli">*Champs obligatoires</p>
-    </div>
-</div>
+{% block title %}FinalisationInscription
 {% endblock %}
-
+{% block body %}
+	<div class="Inscription">
+		<div class="RedirectionConnexionForm">
+			<h2>Vous n'avez pas encore de compte?</h2>
+			<a href="{{ path('login_page') }}" class="btn">Se connecter</a>
+		</div>
+		<div class="InscriptionForm">
+			<h2>Choisir un pseudonyme</h2>
+			<form action="{{path('app_register')}}" method="POST">
+				<label for="Pseudonyme">pseudonyme*</label>
+				<input type="text" name="pseudonyme" id="Pseudonyme" required>
+				<button class="rl" type="submit">Finalisation de l'Inscription</button>
+			</form>
+			<p id="champs_obli">*Champs obligatoires</p>
+		</div>
+	</div>
+{% endblock %}

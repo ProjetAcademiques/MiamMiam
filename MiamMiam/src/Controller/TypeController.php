@@ -14,13 +14,6 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/type')]
 final class TypeController extends AbstractController
 {
-    #[Route(name: 'app_type_index', methods: ['GET'])]
-    public function index(TypeRepository $typeRepository): Response
-    {
-        return $this->render('type/index.html.twig', [
-            'types' => $typeRepository->findAll(),
-        ]);
-    }
 
     #[Route('/new', name: 'app_type_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -42,14 +35,6 @@ final class TypeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_type_show', methods: ['GET'])]
-    public function show(Type $type): Response
-    {
-        return $this->render('type/show.html.twig', [
-            'type' => $type,
-        ]);
-    }
-
     #[Route('/{id}/edit', name: 'app_type_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Type $type, EntityManagerInterface $entityManager): Response
     {
@@ -66,16 +51,5 @@ final class TypeController extends AbstractController
             'type' => $type,
             'form' => $form,
         ]);
-    }
-
-    #[Route('/{id}', name: 'app_type_delete', methods: ['POST'])]
-    public function delete(Request $request, Type $type, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$type->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($type);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -54,13 +54,14 @@ form input{
     margin: 10px;
 }
 
-form button{
+form button.rl{
     border-radius: 15px;
     width: 30%;
     border: none;
     background-color:#cfe8d5;
     height: 40px;
 }
+
 a.btn{
     display: inline-block;
     padding: 10px 20px;
@@ -70,7 +71,7 @@ a.btn{
     text-decoration: none;
     border-radius: 15px;
     background-color: white;
-    width: 40%;
+    
 }
 #champs_obli{
     position: absolute;
