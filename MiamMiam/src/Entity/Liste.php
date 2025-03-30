@@ -81,22 +81,22 @@ class Liste
         return $this->liste_article;
     }
 
-    public function addIdListeArticle(ListeArticle $idListeArticle): static
+    public function addListeArticle(ListeArticle $listeArticle): static
     {
-        if (!$this->liste_article->contains($idListeArticle)) {
-            $this->liste_article->add($idListeArticle);
-            $idListeArticle->setListe($this);
+        if (!$this->liste_article->contains($listeArticle)) {
+            $this->liste_article->add($listeArticle);
+            $listeArticle->setListe($this);
         }
 
         return $this;
     }
 
-    public function removeIdListeArticle(ListeArticle $idListeArticle): static
+    public function removeListeArticle(ListeArticle $listeArticle): static
     {
-        if ($this->liste_article->removeElement($idListeArticle)) {
+        if ($this->liste_article->removeElement($listeArticle)) {
             // set the owning side to null (unless already changed)
-            if ($idListeArticle->getListe() === $this) {
-                $idListeArticle->setListe(null);
+            if ($listeArticle->getListe() === $this) {
+                $listeArticle->setListe(null);
             }
         }
 

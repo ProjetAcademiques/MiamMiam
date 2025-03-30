@@ -21,7 +21,7 @@ class Type
     /**
      * @var Collection<int, Article>
      */
-    #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'Type')]
+    #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'type')]
     private Collection $articles;
 
     public function __construct()

@@ -24,13 +24,13 @@ class Article
     /**
      * @var Collection<int, ListeArticle>
      */
-    #[ORM\OneToMany(targetEntity: ListeArticle::class, mappedBy: 'id_article', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: ListeArticle::class, mappedBy: 'article', orphanRemoval: true)]
     private Collection $liste_article;
 
     /**
      * @var Collection<int, Type>
      */
-    #[ORM\ManyToMany(targetEntity: Type::class, mappedBy: 'article')]
+    #[ORM\ManyToMany(targetEntity: Type::class, mappedBy: 'articles')]
     private Collection $type;
 
     /**
@@ -83,22 +83,22 @@ class Article
         return $this->liste_article;
     }
 
-    public function addIdListeArticle(ListeArticle $idListeArticle): static
+    public function addListeArticle(ListeArticle $listeArticle): static
     {
-        if (!$this->liste_article->contains($idListeArticle)) {
-            $this->liste_article->add($idListeArticle);
-            $idListeArticle->setArticle($this);
+        if (!$this->liste_article->contains($listeArticle)) {
+            $this->liste_article->add($listeArticle);
+            $listeArticle->setArticle($this);
         }
 
         return $this;
     }
 
-    public function removeIdListeArticle(ListeArticle $idListeArticle): static
+    public function removeListeArticle(ListeArticle $listeArticle): static
     {
-        if ($this->liste_article->removeElement($idListeArticle)) {
+        if ($this->liste_article->removeElement($listeArticle)) {
             // set the owning side to null (unless already changed)
-            if ($idListeArticle->getArticle() === $this) {
-                $idListeArticle->setArticle(null);
+            if ($listeArticle->getArticle() === $this) {
+                $listeArticle->setArticle(null);
             }
         }
 

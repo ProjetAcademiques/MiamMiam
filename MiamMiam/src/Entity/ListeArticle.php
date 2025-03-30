@@ -20,11 +20,11 @@ class ListeArticle
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_ajout = null;
 
-    #[ORM\ManyToOne(inversedBy: 'id_liste_article')]
+    #[ORM\ManyToOne(inversedBy: 'liste_article')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Article $article = null;
 
-    #[ORM\ManyToOne(inversedBy: 'id_liste_article')]
+    #[ORM\ManyToOne(inversedBy: 'liste_article')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Liste $liste = null;
 
