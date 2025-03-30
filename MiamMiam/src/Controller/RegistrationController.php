@@ -61,6 +61,9 @@ class RegistrationController extends AbstractController
 
     #[Route('/pastregister', name: 'app_past_register')]
     public function RedirectPastregister(): Response{
+        if ($this->getUser()){
+            return $this->redirectToRoute('app_liste_index');
+        }
         return $this->render('registration/pastregister.html.twig');
     }
 
