@@ -3,8 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Liste;
-use App\Entity\Article;
+use App\Entity\ListeArticle;
 use App\Form\ListeType;
+use App\Form\ListeArticleType;
 use App\Repository\ListeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -122,5 +123,28 @@ final class ListeController extends AbstractController
 
         return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{id}/add', name: 'app_liste_add', methods: ['GET', 'POST'])]
+public function addArticle(Request $request, Liste $liste, EntityManagerInterface $entityManager): Response
+{
+    $listeArticle = new ListeArticle();
+    $listeArticle->setListe($liste);
+
+    $form = $this->createForm(ListeArticleType::class, $listeArticle);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $listeArticle->setDateAjout(new \DateTime());
+        $entityManager->persist($listeArticle);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_liste_show', ['id' => $liste->getId()], Response::HTTP_SEE_OTHER);
+    }
+
+    return $this->render('liste/add_article.html.twig', [
+        'liste' => $liste,
+        'form' => $form->createView(),
+    ]);
+}
     
 }
