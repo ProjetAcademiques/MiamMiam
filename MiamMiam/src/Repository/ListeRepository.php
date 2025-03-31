@@ -28,6 +28,18 @@ class ListeRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function countArticlesInListe(int $listeId): int
+    {
+        return (int) $this->createQueryBuilder('l')
+            ->select('COUNT(la.id)')
+            ->join('l.liste_article', 'la')
+            ->where('l.id = :listeId')
+            ->setParameter('listeId', $listeId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+
 //    /**
 //     * @return Liste[] Returns an array of Liste objects
 //     */
