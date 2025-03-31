@@ -13,6 +13,16 @@
     padding: 0 2rem;
     margin: 0;
 }
+.form-control {
+    width: 20rem;
+    background-color: var(--lightGreen);
+}
+.form-control::placeholder {
+    color: var(--green);
+}
+.form-control:focus {
+    background-color: var(--lightGreen);
+}
 .bt-new-list {
     display: flex;
     width: 20rem;
@@ -118,17 +128,4 @@ div.actions form {
     display: inline;
     width: auto;
     height: auto;
-}
-.modifier
-{
-    background-color: #79A18B;
-    border: none;
-    border-radius: 5px;
-    padding: 5px;
-    color: white;
-    width: 5rem;
-    min-width: fit-content;
-    display: inline-block;
-    margin: 0 auto;
-    display: block;
 }

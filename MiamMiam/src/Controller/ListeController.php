@@ -11,26 +11,36 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[Route('/liste')]
 final class ListeController extends AbstractController
 {
     #[Route(name: 'app_liste_index', methods: ['GET', 'POST'])]
-    public function index(Request $request, ListeRepository $listeRepository, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, ListeRepository $listeRepository, EntityManagerInterface $entityManager, UserInterface $user): Response
     {
         $liste = new Liste();
         $form = $this->createForm(ListeType::class, $liste);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $liste->addUser($this->getUser());
             $entityManager->persist($liste);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        $listes = $listeRepository->findAll();
+//        $listes = $listeRepository->findAll();
+        $listes = $entityManager->getRepository(Liste::class)->createQueryBuilder('l')
+            ->join('l.users', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $user->getId())
+            ->getQuery()
+            ->getResult();
+
         $articlesParListe = [];
+        $nbArticlesParListe = [];
 
         foreach ($listes as $liste) {
             $articlesParListe[$liste->getId()] = $listeRepository->findArticlesByListeId($liste->getId());
