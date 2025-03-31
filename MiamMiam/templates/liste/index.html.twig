@@ -13,21 +13,18 @@
 	<h1>Mes listes de courses</h1>
 
 	<main>
+		{{ include('liste/stats.html.twig') }}
 
 		{{ include('liste/_form.html.twig') }}
 
 		<div class="flex-lists">
 			{% for liste in listes %}
 				<div class="list">
-
 					<h2>{{ liste.nom }}</h2>
-
 					<div class="list-container">
-
 						<ul class="list-articles">
 							{% set articles = articlesParListe[liste.id] %}
 							{% set nbArticles = nbArticlesParListe[liste.id] %}
-
 							{% for article in (nbArticles <= 3 ? articles : articles|slice(0, 3)) %}
 								<li class="info-article">
 									<div>{{ article.nom }}</div>
@@ -35,33 +32,29 @@
 								</li>
 							{% endfor %}
 						</ul>
-
 						{% if nbArticlesParListe[liste.id] > 3 %}
 							<span class="list-separator"></span>
 							{% if nbArticlesParListe[liste.id]-3 == 1 %}
-								<p class="nb-articles"> + {{ nbArticlesParListe[liste.id]-3 }} article</p>
+								<p class="nb-articles">
+									+
+									{{ nbArticlesParListe[liste.id]-3 }}
+									article</p>
 							{% else %}
-								<p class="nb-articles"> + {{ nbArticlesParListe[liste.id]-3 }} articles</p>
+								<p class="nb-articles">
+									+
+									{{ nbArticlesParListe[liste.id]-3 }}
+									articles</p>
 							{% endif %}
 						{% endif %}
-
 						<span class="list-separator"></span>
-
 						<a href="{{ path('app_liste_show', {'id': liste.id}) }}" class="bt-list">Voir le détail</a>
-						<a href="{{ path('app_liste_edit', {'id': liste.id}) }}" class="bt-list">Modifier</a>
-						<a href="{{ path('app_liste_add', {'id': liste.id}) }}" class="bt-list">Ajouter</a>
+						<a href="{{ path('app_liste_edit', {'id': liste.id}) }}" class="bt-list">Modifier le nom</a>
 						{{ include('liste/_delete_form.html.twig') }}
 					</div>
 				</div>
-
 			{% else %}
-				<tr>
-					<td colspan="4">Aucune liste</td>
-				</tr>
+				<div class="alert alert-info">Aucune liste</div>
 			{% endfor %}
-
 		</div>
-
-
 	</main>
 {% endblock %}

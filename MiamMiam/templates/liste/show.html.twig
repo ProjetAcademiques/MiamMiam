@@ -1,33 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste{% endblock %}
+{% block title %}Liste
+{% endblock %}
 
 {% block body %}
-    <h1>Liste</h1>
-    <main>
+	<h1>Liste</h1>
+	<main>
+
 		<table class="table">
 			<thead>
 				<tr>
 					<th>Nom</th>
 					<th>Quantité</th>
 					<th>Date d'ajout</th>
+					<th>Statut</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				{% for article in articles %}
-				<tr>
-					<td>{{ article[0].nom }}</td>
-					<td>{{ article.quantite }}</td>
-					<td>{{ article.date_ajout|date('Y-m-d H:i:s') }}</td>
-				</tr>
+					<tr class="{{ article.achete ? 'achete' : '' }}">
+						<td>{{ article.nom }}</td>
+						<td>{{ article.quantite }}</td>
+						<td>{{ article.date_ajout|date('Y-m-d H:i:s') }}</td>
+						<td>
+							<form method="post" action="{{ path('app_article_toggle', {'id': article.liste_article_id}) }}" class="toggle-form">
+								<input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ article.liste_article_id) }}">
+								<button type="submit" class="btn btn-{{ article.achete ? 'success' : 'outline-success' }}">
+									{{ article.achete ? 'Acheté' : 'À acheter' }}
+								</button>
+							</form>
+						</td>
+						<td>
+							<form method="post" action="{{ path('app_article_delete', {'id': article.liste_article_id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet article?');">
+								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.liste_article_id) }}">
+								<button class="btn btn-danger">Supprimer</button>
+							</form>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="5" class="text-center">Aucun article dans cette liste</td>
+					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 
-		<a href="{{ path('app_liste_index') }}">back to list</a>
+		<div class="actions">
+			<a href="{{ path('app_liste_add', {'id': liste.id}) }}" class="btn btn-primary">Ajouter un article</a>
+			<a href="{{ path('app_liste_edit', {'id': liste.id}) }}" class="btn btn-secondary">Modifier le nom</a>
+			<a href="{{ path('app_liste_index') }}" class="btn btn-secondary">Retour aux listes</a>
+			{{ include('liste/_delete_form.html.twig') }}
+		</div>
 
-		<a href="{{ path('app_liste_edit', {'id': liste.id}) }}">edit</a>
 
-		{{ include('liste/_delete_form.html.twig') }}
-    </main>
+	</main>
 {% endblock %}

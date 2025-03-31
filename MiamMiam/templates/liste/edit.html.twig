@@ -1,13 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Liste
+{% block title %}Modifier la liste
 {% endblock %}
 
 {% block body %}
-	<h1>Edit Liste</h1>
+	<h1>Modifier la liste</h1>
 
 	<main>
-		{{ include('liste/_form.html.twig', {'button_label': 'Update'}) }}
+		{{ include('liste/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
 		<div class="actions">
 			<a class="btn btn-info" href="{{ path('app_liste_index') }}">Revenir aux listes</a>
 			{{ include('liste/_delete_form.html.twig') }}

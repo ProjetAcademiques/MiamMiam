@@ -1,15 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau Magasin
+{% block title %}Modifier l'utilisateur
 {% endblock %}
 
 {% block body %}
-	<h1>Ajouter un magasin</h1>
+	<h1>Modifier l'utilisateur</h1>
 	<main class="container my-4">
 		<div class="row">
 			<div class="col-md-8 actions">
-				{{ include('magasin/_form.html.twig') }}
+				{{ include('user/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 				<a href="{{ path('app_crud_show') }}" class="btn btn-info">Revenir au CRUD</a>
+				{{ include('user/_delete_form.html.twig', {'button_label': 'Supprimer le compte'}) }}
+
 			</div>
 		</div>
 	</main>

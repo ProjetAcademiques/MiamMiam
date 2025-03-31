@@ -28,6 +28,9 @@ class ListeArticle
     #[ORM\JoinColumn(nullable: false)]
     private ?Liste $liste = null;
 
+    #[ORM\Column(options: ["default" => false])]
+    private ?bool $acheter = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -77,6 +80,18 @@ class ListeArticle
     public function setListe(?Liste $liste): static
     {
         $this->liste = $liste;
+
+        return $this;
+    }
+
+    public function isAcheter(): ?bool
+    {
+        return $this->acheter;
+    }
+
+    public function setAcheter(bool $acheter): static
+    {
+        $this->acheter = $acheter;
 
         return $this;
     }

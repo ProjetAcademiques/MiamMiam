@@ -1,23 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ajouter un article à la liste{% endblock %}
+{% block title %}Ajouter un article à la liste
+{% endblock %}
 
 {% block body %}
-    <h1>Ajouter un article à la liste : {{ liste.nom }}</h1>
+	<h1>Ajouter un article à la liste</h1>
 
-    <main>
-    {{ form_start(form) }}
-        <div>
-            {{ form_label(form.article) }}
-            {{ form_widget(form.article) }}
-        </div>
-        <div>
-            {{ form_label(form.quantite) }}
-            {{ form_widget(form.quantite) }}
-        </div>
-        <button type="submit">Ajouter</button>
-    {{ form_end(form) }}
+	<main class="container my-4">
+		<div class="row">
+			<div class="col-md-8 actions">
+				{{ form_start(form) }}
+				<div>
+					{{ form_label(form.article) }}
+					{{ form_widget(form.article) }}
+				</div>
+				<div>
+					{{ form_label(form.quantite) }}
+					{{ form_widget(form.quantite) }}
+				</div>
+				<button class="btn btn-primary" type="submit">Ajouter</button>
+				{{ form_end(form) }}
+				<a class="btn btn-info" href="{{ path('app_liste_show', {'id': liste.id}) }}">Retour à la liste</a>
+			</div>
+		</div>
 
-    <a href="{{ path('app_liste_show', {'id': liste.id}) }}">Retour à la liste</a>
-    </main>
+	</main>
 {% endblock %}

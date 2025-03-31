@@ -1,12 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Article
+{% block title %}Nouvel Article
 {% endblock %}
 
 {% block body %}
-	<h1>Create new Article</h1>
-    
-	{{ include('article/_form.html.twig') }}
-
-	<a href="{{ path('app_crud_show') }}">Revenir au CRUD</a>
+	<h1>Ajouter un article</h1>
+	<main class="container my-4">
+		<div class="row">
+			<div class="col-md-8 actions">
+				{{ include('article/_form.html.twig') }}
+				<a href="{{ path('app_crud_show') }}" class="btn btn-info">Revenir au CRUD</a>
+			</div>
+		</div>
+	</main>
 {% endblock %}

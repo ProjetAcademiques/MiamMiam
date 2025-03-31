@@ -1,178 +1,117 @@
-<div class="container mt-4">
-			{% set totalDepense = 0 %}
-			{% set totalArticles = 0 %}
-			{% set articlePlusCher = null %}
-			{% set articleMoinsCher = null %}
-			{% set repartitionParType = {} %}
-			{% set chartId = "typeChart_" ~ liste.id %}
-
-			{# Calcul des statistiques #}
-			{% for listeArticle in liste.listeArticle %}
-				{% set article = listeArticle.article %}
-				{% set quantite = listeArticle.quantite %}
-				{% set prixTotal = article.prix * quantite %}
-				{% set totalDepense = totalDepense + prixTotal %}
-				{% set totalArticles = totalArticles + quantite %}
-
-				{# Article le plus cher #}
-				{% if articlePlusCher is null or article.prix > articlePlusCher.prix %}
-					{% set articlePlusCher = article %}
-				{% endif %}
-
-				{# Article le moins cher #}
-				{% if articleMoinsCher is null or article.prix < articleMoinsCher.prix %}
-					{% set articleMoinsCher = article %}
-				{% endif %}
-
-				{# Répartition par type #}
-				{% for type in article.type %}
-					{% set typeName = type.nom %}
-					{% if repartitionParType[typeName] is defined %}
-						{% set repartitionParType = repartitionParType|merge({(typeName): repartitionParType[typeName] + prixTotal}) %}
-					{% else %}
-						{% set repartitionParType = repartitionParType|merge({(typeName): prixTotal}) %}
-					{% endif %}
-				{% endfor %}
-			{% endfor %}
-
-			{# Calcul de la moyenne par article #}
-			{% set moyenneParArticle = totalArticles > 0 ? totalDepense / totalArticles : 0 %}
-
-			<div class="row">
-				<div class="col-md-6">
-					<div class="card mb-3">
-						<div class="card-header">Dépenses</div>
-						<div class="card-body">
-							<p>
-								<strong>Total dépensé :</strong>
-								{{ totalDepense|number_format(2, ',', ' ') }}
-								€</p>
-							<p>
-								<strong>Moyenne par article :</strong>
-								{{ moyenneParArticle|number_format(2, ',', ' ') }}
-								€</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="card mb-3">
-						<div class="card-header">Articles</div>
-						<div class="card-body">
-							<p>
-								<strong>Article le plus cher :</strong>
-								{% if articlePlusCher %}
-									{{ articlePlusCher.nom }}
-									({{ articlePlusCher.prix|number_format(2, ',', ' ') }}
-									€)
-								{% else %}
-									Aucun article
-								{% endif %}
-							</p>
-							<p>
-								<strong>Article le moins cher :</strong>
-								{% if articleMoinsCher %}
-									{{ articleMoinsCher.nom }}
-									({{ articleMoinsCher.prix|number_format(2, ',', ' ') }}
-									€)
-								{% else %}
-									Aucun article
-								{% endif %}
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="card">
-				<div class="card-header">Répartition des dépenses par type</div>
+<div class="stats-globales my-4 p-3 border rounded bg-light">
+	<div
+		class="row">
+		<div class="col-md-4">
+			<div class="card mb-3">
+				<div class="card-header bg-primary text-white">Résumé des achats</div>
 				<div class="card-body">
-					<div class="row">
-						<div class="col-md-8">
-							<div style="height: 300px; width: 300px; margin: 0 auto;">
-								<canvas id="{{ chartId }}" data-labels="{{ repartitionParType|keys|json_encode }}" data-montants="{{ repartitionParType|json_encode }}"></canvas>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<ul class="list-group">
-								{% for type, montant in repartitionParType %}
-									<li class="list-group-item d-flex justify-content-between align-items-center">
-										{{ type }}
-										<span class="badge bg-primary rounded-pill">{{ montant|number_format(2, ',', ' ') }}
-											€</span>
-									</li>
-								{% endfor %}
-							</ul>
-						</div>
-					</div>
+					<p>
+						<strong>Nombre total d'articles :</strong>
+						{{ statsGlobales.totalArticles }}</p>
+					<p>
+						<strong>Prix total :</strong>
+						{{ statsGlobales.prixTotal|number_format(2, ',', ' ') }}
+						€</p>
+					<p>
+						<strong>Prix moyen par article :</strong>
+						{{ statsGlobales.moyennePrixArticle|number_format(2, ',', ' ') }}
+						€</p>
 				</div>
 			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="card mb-3">
+				<div class="card-header bg-warning text-white">Information d'article</div>
+				<div class="card-body">
+					{% if statsGlobales.articlePlusCher %}
+						<p>
+							<strong>Article le plus cher :</strong><br>
+							{{ statsGlobales.articlePlusCher.nom }}
+							-
+							{{ statsGlobales.articlePlusCher.prix|number_format(2, ',', ' ') }}
+							€</p>
+					{% else %}
+						<p>
+							<strong>Article le plus cher :</strong>
+							Aucun</p>
+					{% endif %}
+
+					{% if statsGlobales.articleMoinsCher %}
+						<p>
+							<strong>Article le moins cher :</strong><br>
+							{{ statsGlobales.articleMoinsCher.nom }}
+							-
+							{{ statsGlobales.articleMoinsCher.prix|number_format(2, ',', ' ') }}
+							€</p>
+					{% else %}
+						<p>
+							<strong>Article le moins cher :</strong>
+							Aucun</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="card mb-3">
+				<div class="card-header bg-secondary text-white">Articles les plus achetés</div>
+				<div class="card-body">
+					<ul class="list-group">
+						{% for articleNom, quantite in statsGlobales.articlesLesPlusAchetes %}
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								{{ articleNom }}
+								<span class="badge bg-primary rounded-pill">{{ quantite }}</span>
+							</li>
+						{% else %}
+							<li class="list-group-item">Aucun article</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row mt-3">
+		<div class="col-12">
+			<div class="card mb-3">
+				<div class="card-header bg-success text-white">Répartition des dépenses par type d'article</div>
+				<div class="card-body">
+					{% if statsGlobales.depensesParType|length > 0 %}
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>Type</th>
+										<th>Montant</th>
+										<th>Pourcentage</th>
+										<th>Représentation</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for typeNom, data in statsGlobales.depensesParType %}
+										<tr>
+											<td>{{ typeNom }}</td>
+											<td>{{ data.montant|number_format(2, ',', ' ') }}
+												€</td>
+											<td>{{ data.pourcentage|number_format(1, ',', ' ') }}%</td>
+											<td style="width: 40%">
+												<div class="progress">
+													<div class="progress-bar bg-success" role="progressbar" style="width: {{ data.pourcentage }}%;">
+														{{ data.pourcentage|number_format(1) }}%
+													</div>
+												</div>
+											</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					{% else %}
+						<p class="text-center">Aucune donnée disponible sur les types d'articles</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-
-<script>
-	document.addEventListener('DOMContentLoaded', function () { 
-		// Vérifie si Chart.js est déjà chargé, sinon le charge
-		if (typeof Chart === 'undefined') {
-			var script = document.createElement('script');
-			script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
-			script.onload = initChart;
-			document.head.appendChild(script);
-		} else {
-			initChart();
-		}
-
-		function initChart() {
-			const chart = document.getElementById('{{ chartId }}');
-			if (!chart) return; // Sécurité si l'élément n'existe pas
-
-			const labels = JSON.parse(chart.dataset.labels || '[]');
-			const montants = JSON.parse(chart.dataset.montants || '{}');
-
-			// Extraire les valeurs du tableau associatif
-			const values = labels.map(label => montants[label] || 0);
-
-			const ctx = chart.getContext('2d');
-			const typeChart = new Chart(ctx, {
-				type: 'pie',
-				data: {
-					labels: labels,
-					datasets: [
-						{
-							data: values,
-							backgroundColor: [
-								'rgba(255, 99, 132, 0.7)',
-								'rgba(54, 162, 235, 0.7)',
-								'rgba(255, 206, 86, 0.7)',
-								'rgba(75, 192, 192, 0.7)',
-								'rgba(153, 102, 255, 0.7)',
-								'rgba(255, 159, 64, 0.7)',
-							],
-							borderWidth: 1
-						}
-					]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: true,
-					plugins: {
-						legend: {
-							position: 'right',
-							labels: {
-								boxWidth: 12,
-								font: {
-									size: 11
-								}
-							}
-						},
-						title: {
-							display: true,
-							text: 'Répartition par type d\'articles',
-							font: {
-								size: 14
-							}
-						}
-					}
-				}
-			});
-		}
-	});
-</script>

@@ -1,12 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Type
+{% block title %}Modifier le type
 {% endblock %}
 
 {% block body %}
-	<h1>Edit Type</h1>
+	<h1>Modifier le type</h1>
+	<main class="container my-4">
+		<div class="row">
+			<div class="col-md-8">
 
-	{{ include('type/_form.html.twig', {'button_label': 'Update'}) }}
+				{{ include('type/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-	<a href="{{ path('app_crud_show') }}">Revenir au CRUD</a>
+				<div class="mt-3">
+					<a href="{{ path('app_crud_show') }}" class="btn btn-info">Revenir au CRUD</a>
+				</div>
+			</div>
+		</div>
+	</main>
 {% endblock %}

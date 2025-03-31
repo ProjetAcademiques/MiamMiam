@@ -17,8 +17,8 @@ class MagasinType extends AbstractType
             ->add('nom')
             ->add('articles', EntityType::class, [
                 'class' => Article::class,
-                'choice_label' => 'id',
-                'multiple' => true,
+                'choice_label' => 'nom',
+                'multiple' => true
             ])
         ;
     }

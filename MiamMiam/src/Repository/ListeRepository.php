@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Liste;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,10 +17,28 @@ class ListeRepository extends ServiceEntityRepository
         parent::__construct($registry, Liste::class);
     }
 
+    /**
+     * Récupère toutes les listes d'un utilisateur
+     * 
+     * @param User|int $user L'utilisateur ou son ID
+     * @return array Les listes de l'utilisateur
+     */
+    public function findListesByUser($user): array
+    {
+        $userId = $user instanceof User ? $user->getId() : $user;
+        
+        return $this->createQueryBuilder('l')
+            ->join('l.users', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findArticlesByListeId(int $listeId): array
     {
         return $this->createQueryBuilder('l')
-            ->select('a.id, a.nom, a.prix, la.quantite, la.date_ajout')
+            ->select('a.id, a.nom, a.prix, la.quantite, la.date_ajout, la.acheter as achete, la.id as liste_article_id')
             ->join('l.liste_article', 'la')
             ->join('la.article', 'a')
             ->where('l.id = :listeId')
@@ -38,7 +57,6 @@ class ListeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-
 
 //    /**
 //     * @return Liste[] Returns an array of Liste objects

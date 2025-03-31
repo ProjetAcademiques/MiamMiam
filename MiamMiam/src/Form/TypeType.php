@@ -17,7 +17,7 @@ class TypeType extends AbstractType
             ->add('nom')
             ->add('articles', EntityType::class, [
                 'class' => Article::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
                 'multiple' => true,
             ])
         ;

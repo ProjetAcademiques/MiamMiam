@@ -1,0 +1,12 @@
+{{ form_start(form) }}
+{{ form_row(form.email) }}
+{{ form_row(form.password) }}
+{{ form_row(form.pseudo) }}
+<div class="d-none">
+	{{ form_row(form.date_creation) }}
+</div>
+{{ form_row(form.is_admin) }}
+{{ form_row(form.listes) }}
+
+<button class="btn btn-primary">{{ button_label|default('Sauvegarder') }}</button>
+{{ form_end(form) }}

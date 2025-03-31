@@ -7,6 +7,7 @@ use App\Entity\ListeArticle;
 use App\Form\ListeType;
 use App\Form\ListeArticleType;
 use App\Repository\ListeRepository;
+use App\Repository\ListeArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +19,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final class ListeController extends AbstractController
 {
     #[Route(name: 'app_liste_index', methods: ['GET', 'POST'])]
-    public function index(Request $request, ListeRepository $listeRepository, EntityManagerInterface $entityManager, UserInterface $user): Response
+    public function index(Request $request, ListeRepository $listeRepository, EntityManagerInterface $entityManager, UserInterface $user, ListeArticleRepository $listeArticleRepository): Response
     {
         $liste = new Liste();
         $form = $this->createForm(ListeType::class, $liste);
@@ -32,26 +33,130 @@ final class ListeController extends AbstractController
             return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
         }
 
-//        $listes = $listeRepository->findAll();
-        $listes = $entityManager->getRepository(Liste::class)->createQueryBuilder('l')
-            ->join('l.users', 'u')
-            ->where('u.id = :userId')
-            ->setParameter('userId', $user->getId())
-            ->getQuery()
-            ->getResult();
+        $listes = $listeRepository->findListesByUser($user);
 
         $articlesParListe = [];
         $nbArticlesParListe = [];
 
+        // Statistiques individuelles par liste
         foreach ($listes as $liste) {
             $articlesParListe[$liste->getId()] = $listeRepository->findArticlesByListeId($liste->getId());
             $nbArticlesParListe[$liste->getId()] = count($articlesParListe[$liste->getId()]);
         }
+        
+        $statsGlobales = [
+            'totalArticles' => 0,
+            'prixTotal' => 0,
+            'moyennePrixArticle' => 0,
+            'articlesLesPlusAchetes' => [],
+            'magasinsLesPlusFrequentes' => [],
+            'articlePlusCher' => null,
+            'articleMoinsCher' => null,
+            'depensesParType' => []
+        ];
+        
+        $allArticles = $listeArticleRepository->findAllArticlesByUser($user);
+        
+        // Calcul des statistiques
+        $articlesCount = [];
+        $magasinsCount = [];
+        $depensesParType = [];
+        $plusCher = ['prix' => 0, 'article' => null];
+        $moinsCher = ['prix' => PHP_FLOAT_MAX, 'article' => null];
+        
+        foreach ($allArticles as $listeArticle) {
+            $articleObj = $listeArticle->getArticle();
+            $quantite = $listeArticle->getQuantite();
+            $prix = $articleObj->getPrix();
+            $prixTotal = $prix * $quantite;
+            
+            // Comptage total d'articles et prix
+            $statsGlobales['totalArticles'] += $quantite;
+            $statsGlobales['prixTotal'] += $prixTotal;
+            
+            // Article le plus cher/moins cher (unitaire)
+            if ($prix > $plusCher['prix']) {
+                $plusCher['prix'] = $prix;
+                $plusCher['article'] = $articleObj;
+            }
+            if ($prix < $moinsCher['prix'] && $prix > 0) {
+                $moinsCher['prix'] = $prix;
+                $moinsCher['article'] = $articleObj;
+            }
+            
+            // Comptage des articles les plus achetés
+            $articleNom = $articleObj->getNom();
+            if (!isset($articlesCount[$articleNom])) {
+                $articlesCount[$articleNom] = 0;
+            }
+            $articlesCount[$articleNom] += $quantite;
+            
+            // Comptage des magasins les plus fréquentés
+            $magasins = $articleObj->getMagasin();
+            if (!$magasins->isEmpty()) {
+                foreach ($magasins as $magasin) {
+                    $magasinNom = $magasin->getNom();
+                    if (!isset($magasinsCount[$magasinNom])) {
+                        $magasinsCount[$magasinNom] = 0;
+                    }
+                    $magasinsCount[$magasinNom] += $quantite;
+                }
+            }
+            
+            // Calcul de la répartition des dépenses par type d'article
+            $types = $articleObj->getType();
+            if (!$types->isEmpty()) {
+                foreach ($types as $type) {
+                    $typeNom = $type->getNom();
+                    $typeId = $type->getId();
+                    if (!isset($depensesParType[$typeNom])) {
+                        $depensesParType[$typeNom] = [
+                            'id' => $typeId,
+                            'montant' => 0,
+                            'pourcentage' => 0
+                        ];
+                    }
+                    $depensesParType[$typeNom]['montant'] += $prixTotal;
+                }
+            }
+        }
+        
+        // Calcul de la moyenne du prix des articles
+        if ($statsGlobales['totalArticles'] > 0) {
+            $statsGlobales['moyennePrixArticle'] = $statsGlobales['prixTotal'] / $statsGlobales['totalArticles'];
+        }
+        
+        // Tri des articles les plus achetés et limitation à 5
+        arsort($articlesCount);
+        $statsGlobales['articlesLesPlusAchetes'] = array_slice($articlesCount, 0, 5, true);
+        
+        // Tri des magasins les plus fréquentés et limitation à 3
+        arsort($magasinsCount);
+        $statsGlobales['magasinsLesPlusFrequentes'] = array_slice($magasinsCount, 0, 3, true);
+        
+        // Assignation des articles les plus chers/moins chers
+        $statsGlobales['articlePlusCher'] = $plusCher['article'];
+        $statsGlobales['articleMoinsCher'] = $moinsCher['article'];
+        
+        // Calcul des pourcentages pour la répartition des dépenses par type
+        foreach ($depensesParType as $type => $data) {
+            if ($statsGlobales['prixTotal'] > 0) {
+                $depensesParType[$type]['pourcentage'] = ($data['montant'] / $statsGlobales['prixTotal']) * 100;
+            }
+        }
+        
+        // Tri des types par montant dépensé (décroissant)
+        uasort($depensesParType, function ($a, $b) {
+            return $b['montant'] <=> $a['montant'];
+        });
+        
+        $statsGlobales['depensesParType'] = $depensesParType;
 
         return $this->render('liste/index.html.twig', [
             'listes' => $listes,
             'articlesParListe' => $articlesParListe,
             'nbArticlesParListe' => $nbArticlesParListe,
+            'statsGlobales' => $statsGlobales,
             'form' => $form->createView(),
         ]);
     }
@@ -77,17 +182,9 @@ final class ListeController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_liste_show', methods: ['GET'])]
-    public function show(Liste $liste, EntityManagerInterface $entityManager): Response
+    public function show(Liste $liste, ListeRepository $listeRepository): Response
     {
-        $query = $entityManager->createQuery(
-            'SELECT a, la.quantite, la.date_ajout
-             FROM App\Entity\Article a
-             JOIN App\Entity\ListeArticle la WITH la.article = a
-             JOIN App\Entity\Liste l WITH la.liste = l
-             WHERE l.id = :listeId'
-        )->setParameter('listeId', $liste->getId());
-
-        $articles = $query->getResult();
+        $articles = $listeRepository->findArticlesByListeId($liste->getId());
 
         return $this->render('liste/show.html.twig', [
             'liste' => $liste,
@@ -125,26 +222,50 @@ final class ListeController extends AbstractController
     }
 
     #[Route('/{id}/add', name: 'app_liste_add', methods: ['GET', 'POST'])]
-public function addArticle(Request $request, Liste $liste, EntityManagerInterface $entityManager): Response
-{
-    $listeArticle = new ListeArticle();
-    $listeArticle->setListe($liste);
+    public function addArticle(Request $request, Liste $liste, EntityManagerInterface $entityManager): Response
+    {
+        $listeArticle = new ListeArticle();
+        $listeArticle->setListe($liste);
 
-    $form = $this->createForm(ListeArticleType::class, $listeArticle);
-    $form->handleRequest($request);
+        $form = $this->createForm(ListeArticleType::class, $listeArticle);
+        $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $listeArticle->setDateAjout(new \DateTime());
-        $entityManager->persist($listeArticle);
-        $entityManager->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $listeArticle->setDateAjout(new \DateTime());
+            $entityManager->persist($listeArticle);
+            $entityManager->flush();
 
-        return $this->redirectToRoute('app_liste_show', ['id' => $liste->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_liste_show', ['id' => $liste->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('liste/add_article.html.twig', [
+            'liste' => $liste,
+            'form' => $form->createView(),
+        ]);
     }
 
-    return $this->render('liste/add_article.html.twig', [
-        'liste' => $liste,
-        'form' => $form->createView(),
-    ]);
-}
-    
+    #[Route('/article/{id}/toggle', name: 'app_article_toggle', methods: ['POST'])]
+    public function toggleArticleStatus(Request $request, ListeArticle $listeArticle, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('toggle'.$listeArticle->getId(), $request->getPayload()->getString('_token'))) {
+            // Inverser le statut actuel
+            $listeArticle->setAcheter(!$listeArticle->isAcheter());
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_liste_show', ['id' => $listeArticle->getListe()->getId()], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/article/{id}/delete', name: 'app_article_delete', methods: ['POST'])]
+    public function deleteArticle(Request $request, ListeArticle $listeArticle, EntityManagerInterface $entityManager): Response
+    {
+        $listeId = $listeArticle->getListe()->getId();
+
+        if ($this->isCsrfTokenValid('delete'.$listeArticle->getId(), $request->getPayload()->getString('_token'))) {
+            $entityManager->remove($listeArticle);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_liste_show', ['id' => $listeId], Response::HTTP_SEE_OTHER);
+    }
 }

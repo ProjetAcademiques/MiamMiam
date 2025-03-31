@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ListeArticle;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +15,30 @@ class ListeArticleRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ListeArticle::class);
+    }
+
+    /**
+     * Récupère tous les articles de toutes les listes d'un utilisateur
+     * 
+     * @param User|int $user L'utilisateur ou son ID
+     * @return array Les articles avec leurs informations associées
+     */
+    public function findAllArticlesByUser($user): array
+    {
+        $userId = $user instanceof User ? $user->getId() : $user;
+        
+        return $this->createQueryBuilder('la')
+            ->select('la', 'a', 'm', 't')
+            ->join('la.article', 'a')
+            ->join('la.liste', 'l')
+            ->leftJoin('a.magasin', 'm')
+            ->leftJoin('a.type', 't')
+            ->join('l.users', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ->orderBy('la.date_ajout', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**

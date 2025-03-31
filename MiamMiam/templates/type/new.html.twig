@@ -1,12 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Type
+{% block title %}Nouveau type
 {% endblock %}
 
 {% block body %}
-	<h1>Create new Type</h1>
+	<h1>Ajouter un type</h1>
 
-	{{ include('type/_form.html.twig') }}
-
-	<a href="{{ path('app_crud_show') }}">Revenir au CRUD</a>
+	<main class="container my-4">
+		<div class="row">
+			<div class="col-md-8 actions">
+				{{ include('type/_form.html.twig') }}
+				<a href="{{ path('app_crud_show') }}" class="btn btn-info">Revenir au CRUD</a>
+			</div>
+		</div>
+	</main>
 {% endblock %}

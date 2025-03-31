@@ -19,12 +19,12 @@ class ArticleType extends AbstractType
             ->add('prix')
             ->add('type', EntityType::class, [
                 'class' => Type::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
                 'multiple' => true,
             ])
             ->add('magasin', EntityType::class, [
                 'class' => Magasin::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
                 'multiple' => true,
             ])
         ;
@@ -33,7 +33,7 @@ class ArticleType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Article::class,
+            "data_class" => Article::class,
         ]);
     }
 }
