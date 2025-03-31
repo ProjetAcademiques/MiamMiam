@@ -49,7 +49,6 @@ final class ListeController extends AbstractController
             'prixTotal' => 0,
             'moyennePrixArticle' => 0,
             'articlesLesPlusAchetes' => [],
-            'magasinsLesPlusFrequentes' => [],
             'articlePlusCher' => null,
             'articleMoinsCher' => null,
             'depensesParType' => []
@@ -59,7 +58,6 @@ final class ListeController extends AbstractController
         
         // Calcul des statistiques
         $articlesCount = [];
-        $magasinsCount = [];
         $depensesParType = [];
         $plusCher = ['prix' => 0, 'article' => null];
         $moinsCher = ['prix' => PHP_FLOAT_MAX, 'article' => null];
@@ -91,18 +89,6 @@ final class ListeController extends AbstractController
             }
             $articlesCount[$articleNom] += $quantite;
             
-            // Comptage des magasins les plus fréquentés
-            $magasins = $articleObj->getMagasin();
-            if (!$magasins->isEmpty()) {
-                foreach ($magasins as $magasin) {
-                    $magasinNom = $magasin->getNom();
-                    if (!isset($magasinsCount[$magasinNom])) {
-                        $magasinsCount[$magasinNom] = 0;
-                    }
-                    $magasinsCount[$magasinNom] += $quantite;
-                }
-            }
-            
             // Calcul de la répartition des dépenses par type d'article
             $types = $articleObj->getType();
             if (!$types->isEmpty()) {
@@ -126,13 +112,9 @@ final class ListeController extends AbstractController
             $statsGlobales['moyennePrixArticle'] = $statsGlobales['prixTotal'] / $statsGlobales['totalArticles'];
         }
         
-        // Tri des articles les plus achetés et limitation à 5
+        // Tri des articles les plus achetés et limitation à 3
         arsort($articlesCount);
-        $statsGlobales['articlesLesPlusAchetes'] = array_slice($articlesCount, 0, 5, true);
-        
-        // Tri des magasins les plus fréquentés et limitation à 3
-        arsort($magasinsCount);
-        $statsGlobales['magasinsLesPlusFrequentes'] = array_slice($magasinsCount, 0, 3, true);
+        $statsGlobales['articlesLesPlusAchetes'] = array_slice($articlesCount, 0, 3, true);
         
         // Assignation des articles les plus chers/moins chers
         $statsGlobales['articlePlusCher'] = $plusCher['article'];
