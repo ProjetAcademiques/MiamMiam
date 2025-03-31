@@ -8,9 +8,10 @@
 
 	<main>
 		{{ include('liste/_form.html.twig', {'button_label': 'Update'}) }}
+		<div class="actions">
+			<a class="btn btn-info" href="{{ path('app_liste_index') }}">Revenir aux listes</a>
+			{{ include('liste/_delete_form.html.twig') }}
+		</div>
 
-		<a href="{{ path('app_liste_index') }}">Revenir aux listes</a>
-
-		{{ include('liste/_delete_form.html.twig') }}
 	</main>
 {% endblock %}
