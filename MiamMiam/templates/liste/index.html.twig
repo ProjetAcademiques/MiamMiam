@@ -36,9 +36,14 @@
 							{% endfor %}
 						</ul>
 
-						<span class="list-separator"></span>
-
-						<p class="nb-articles"> + {{ nbArticlesParListe[liste.id]-3 }} article(s)</p>
+						{% if nbArticlesParListe[liste.id] > 3 %}
+							<span class="list-separator"></span>
+							{% if nbArticlesParListe[liste.id]-3 == 1 %}
+								<p class="nb-articles"> + {{ nbArticlesParListe[liste.id]-3 }} article</p>
+							{% else %}
+								<p class="nb-articles"> + {{ nbArticlesParListe[liste.id]-3 }} articles</p>
+							{% endif %}
+						{% endif %}
 
 						<span class="list-separator"></span>
 

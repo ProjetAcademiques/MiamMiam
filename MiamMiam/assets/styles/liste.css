@@ -13,6 +13,16 @@
     padding: 0 2rem;
     margin: 0;
 }
+.form-control {
+    width: 20rem;
+    background-color: var(--lightGreen);
+}
+.form-control::placeholder {
+    color: var(--green);
+}
+.form-control:focus {
+    background-color: var(--lightGreen);
+}
 .bt-new-list {
     display: flex;
     width: 20rem;
