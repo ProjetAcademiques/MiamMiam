@@ -6,6 +6,10 @@
 {% block body %}
 	<h1>Liste</h1>
 	<main>
+		<h2>{{ liste.nom }}</h2>
+
+        {{ include('liste/stats.html.twig', {'liste': liste}) }}
+
 		<table class="table">
 			<thead>
 				<tr>
@@ -21,21 +25,14 @@
 						<td>{{ article.quantite }}</td>
 						<td>{{ article.date_ajout|date('Y-m-d H:i:s') }}</td>
 					</tr>
-				{% else %}
-					<tr>
-						<td colspan="3">Aucun article dans cette liste</td>
-					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 
 		<div class="actions">
 			<a class="btn btn-info" href="{{ path('app_liste_index') }}">Revenir aux listes</a>
-
 			<a class="btn btn-secondary" href="{{ path('app_liste_edit', {'id': liste.id}) }}">Modifier</a>
-
 			{{ include('liste/_delete_form.html.twig') }}
 		</div>
-
 	</main>
 {% endblock %}
