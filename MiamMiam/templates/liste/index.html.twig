@@ -38,16 +38,12 @@
 
 						<span class="list-separator"></span>
 
-						<button class="modifier" onclick="window.location.href='{{ path('app_liste_show', {'id': liste.id}) }}'">Voir le détail</button>
-
-						<button class="modifier" onclick="window.location.href='{{ path('app_liste_edit', {'id': liste.id}) }}'">Modifier</button>
-
 						<p class="nb-articles"> + {{ nbArticlesParListe[liste.id]-3 }} article(s)</p>
 
 						<span class="list-separator"></span>
 
-						<a class="bt-list" href="{{ path('app_liste_show', {'id': liste.id}) }}">Voir le détail</a>
-
+						<button class="bt-list" onclick="window.location.href='{{ path('app_liste_show', {'id': liste.id}) }}'">Voir le détail</button>
+						<button class="bt-list" onclick="window.location.href='{{ path('app_liste_edit', {'id': liste.id}) }}'">Modifier</button>
 						{{ include('liste/_delete_form.html.twig') }}
 					</div>
 				</div>
