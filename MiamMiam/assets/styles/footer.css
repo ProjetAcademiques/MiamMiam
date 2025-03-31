@@ -1,7 +1,6 @@
 footer {
     display: block;
     background-color: var(--white);
-    width: 100vw;
     height: 5rem;
     z-index: 2;
 }
