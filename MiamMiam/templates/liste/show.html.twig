@@ -1,41 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste
-{% endblock %}
+{% block title %}Liste{% endblock %}
 
 {% block body %}
-	<h1>Liste</h1>
-	<main>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Nom</th>
-					<th>Quantité</th>
-					<th>Date d'ajout</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for article in articles %}
-					<tr>
-						<td>{{ article[0].nom }}</td>
-						<td>{{ article.quantite }}</td>
-						<td>{{ article.date_ajout|date('Y-m-d H:i:s') }}</td>
-					</tr>
-				{% else %}
-					<tr>
-						<td colspan="3">Aucun article dans cette liste</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+    <h1>Liste</h1>
+    <main>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Quantité</th>
+                <th>Date d'ajout</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+            <tr>
+                <td>{{ article[0].nom }}</td>
+                <td>{{ article.quantite }}</td>
+                <td>{{ article.date_ajout|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-		<div class="actions">
-			<a class="btn btn-info" href="{{ path('app_liste_index') }}">Revenir aux listes</a>
+    <a href="{{ path('app_liste_index') }}">back to list</a>
 
-			<a class="btn btn-secondary" href="{{ path('app_liste_edit', {'id': liste.id}) }}">Modifier</a>
+    <a href="{{ path('app_liste_edit', {'id': liste.id}) }}">edit</a>
 
-			{{ include('liste/_delete_form.html.twig') }}
-		</div>
-
-	</main>
+    {{ include('liste/_delete_form.html.twig') }}
+    </main>
 {% endblock %}

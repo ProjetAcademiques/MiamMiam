@@ -18,7 +18,7 @@
 
 		<div class="flex-lists">
 			{% for liste in listes %}
-				<a class="list" href="{{ path('app_liste_show', {'id': liste.id}) }}">
+				<a class="list">
 
 					<h2>{{ liste.nom }}</h2>
 
@@ -34,6 +34,10 @@
 						</ul>
 
 						<span class="list-separator"></span>
+
+						<button class="modifier" onclick="window.location.href='{{ path('app_liste_show', {'id': liste.id}) }}'">Voir le détail</button>
+
+						<button class="modifier" onclick="window.location.href='{{ path('app_liste_edit', {'id': liste.id}) }}'">Modifier</button>
 
 						{{ include('liste/_delete_form.html.twig') }}
 					</div>

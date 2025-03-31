@@ -85,3 +85,16 @@ div.actions form {
     width: auto;
     height: auto;
 }
+.modifier
+{
+    background-color: #79A18B;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+    width: 5rem;
+    min-width: fit-content;
+    display: inline-block;
+    margin: 0 auto;
+    display: block;
+}

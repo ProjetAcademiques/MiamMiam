@@ -18,9 +18,6 @@ final class ListeController extends AbstractController
     #[Route(name: 'app_liste_index', methods: ['GET', 'POST'])]
     public function index(Request $request, ListeRepository $listeRepository, EntityManagerInterface $entityManager): Response
     {
-        if (!$this->getUser()){
-            return $this->redirectToRoute('login_page');
-        }
         $liste = new Liste();
         $form = $this->createForm(ListeType::class, $liste);
         $form->handleRequest($request);
