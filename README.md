@@ -22,7 +22,7 @@ MiamMiam est un projet scolaire créé lors d'un cours sur Symfony afin d'appren
 - Dans "Outils", cliquer sur Ajouter un Virtual Host.
 - Renseigner les informations suivantes :
 - Nom du Virtual Host : liste2courses.local
-- Chemin du projet : l'emplacement du projet dans le dossier public (exemple : C:/wamp/www/miammiam/miammiam/public).
+- Chemin du projet : l'emplacement du projet dans le dossier public (exemple : C:/wamp64/www/miammiam/miammiam/public).
 - Cliquer sur Démarrer la création ou la modification du Virtual Host.
 - Cliquer droit sur Wamp puis outils et Redémarrage DNS.
 - Accéder au projet via l'URL : http://liste2courses.local.
@@ -34,5 +34,6 @@ MiamMiam est un projet scolaire créé lors d'un cours sur Symfony afin d'appren
 ## informations de connexion administrateur
 
 Après le chargement des fixtures, vous pouvez vous connecter avec les identifiants administrateur suivants :
+
 - Email : minh@ad.fr
 - Mot de passe : minh@ad.fr
