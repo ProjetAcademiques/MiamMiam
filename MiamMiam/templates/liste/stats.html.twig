@@ -3,7 +3,7 @@
 		class="row">
 		<div class="col-md-4">
 			<div class="card mb-3">
-				<div class="card-header bg-primary text-white">Résumé des achats</div>
+				<div class="card-header bg-dark-green text-white">Résumé des achats</div>
 				<div class="card-body">
 					<p>
 						<strong>Nombre total d'articles :</strong>
@@ -22,7 +22,7 @@
 
 		<div class="col-md-4">
 			<div class="card mb-3">
-				<div class="card-header bg-warning text-white">Information d'article</div>
+				<div class="card-header bg-dark-green text-white">Information d'article</div>
 				<div class="card-body">
 					{% if statsGlobales.articlePlusCher %}
 						<p>
@@ -55,13 +55,13 @@
 
 		<div class="col-md-4">
 			<div class="card mb-3">
-				<div class="card-header bg-secondary text-white">Articles les plus achetés</div>
+				<div class="card-header bg-dark-green text-white">Articles les plus achetés</div>
 				<div class="card-body">
 					<ul class="list-group">
 						{% for articleNom, quantite in statsGlobales.articlesLesPlusAchetes %}
 							<li class="list-group-item d-flex justify-content-between align-items-center">
 								{{ articleNom }}
-								<span class="badge bg-primary rounded-pill">{{ quantite }}</span>
+								<span class="badge bg-magenta rounded-pill">{{ quantite }}</span>
 							</li>
 						{% else %}
 							<li class="list-group-item">Aucun article</li>
@@ -75,7 +75,7 @@
 	<div class="row mt-3">
 		<div class="col-12">
 			<div class="card mb-3">
-				<div class="card-header bg-success text-white">Répartition des dépenses par type d'article</div>
+				<div class="card-header bg-dark-green text-white">Répartition des dépenses par type d'article</div>
 				<div class="card-body">
 					{% if statsGlobales.depensesParType|length > 0 %}
 						<div class="table-responsive">
@@ -97,7 +97,7 @@
 											<td>{{ data.pourcentage|number_format(1, ',', ' ') }}%</td>
 											<td style="width: 40%">
 												<div class="progress">
-													<div class="progress-bar bg-success" role="progressbar" style="width: {{ data.pourcentage }}%;">
+													<div class="progress-bar bg-magenta" role="progressbar" style="width: {{ data.pourcentage }}%;">
 														{{ data.pourcentage|number_format(1) }}%
 													</div>
 												</div>

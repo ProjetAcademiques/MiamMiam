@@ -50,6 +50,12 @@
 }
 
 /* DISPLAY LISTS */
+.bg-container {
+    padding: 1rem;
+    background-color: rgb(248,249,250);
+    border: solid #dee2e6 1px;
+    border-radius: 0.5rem;
+}
 .flex-lists {
     display: flex;
     flex-direction: row;
@@ -58,9 +64,10 @@
     gap: 1rem;
 }
 .list {
-    background-color: var(--lightGreen);
+    background-color: var(--white);
     width: calc((100% - 3rem) / 4);
     border-radius: 0.5rem;
+    border: solid #dee2e6 1px;
     text-decoration: none;
     color: inherit;
 }
@@ -141,3 +148,15 @@ div.actions button.bt-del-list {
     text-decoration: line-through;
     opacity: 0.7;
 }
+
+.bg-magenta {
+    background-color: var(--magenta);
+}
+.bg-dark-green {
+    background-color: var(--green);
+}
+
+.bg-light-green {
+    background-color: var(--lightGreen);
+}
+
