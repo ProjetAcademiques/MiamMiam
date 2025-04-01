@@ -18,6 +18,10 @@ final class TypeController extends AbstractController
     #[Route('/new', name: 'app_type_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
+        }
+
         $type = new Type();
         $form = $this->createForm(TypeType::class, $type);
         $form->handleRequest($request);
@@ -38,6 +42,10 @@ final class TypeController extends AbstractController
     #[Route('/{id}/edit', name: 'app_type_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Type $type, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
+        }
+
         $form = $this->createForm(TypeType::class, $type);
         $form->handleRequest($request);
 

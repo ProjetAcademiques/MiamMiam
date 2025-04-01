@@ -18,6 +18,11 @@ final class MagasinController extends AbstractController
     #[Route('/new', name: 'app_magasin_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        // Vérif admin
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
+        }
+
         $magasin = new Magasin();
         $form = $this->createForm(MagasinType::class, $magasin);
         $form->handleRequest($request);
@@ -38,6 +43,11 @@ final class MagasinController extends AbstractController
     #[Route('/{id}/edit', name: 'app_magasin_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Magasin $magasin, EntityManagerInterface $entityManager): Response
     {
+        // Vérification des droits d'administrateur
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
+        }
+
         $form = $this->createForm(MagasinType::class, $magasin);
         $form->handleRequest($request);
 

@@ -146,6 +146,10 @@ final class ListeController extends AbstractController
     #[Route('/{id}', name: 'app_liste_show', methods: ['GET'])]
     public function show(Liste $liste, ListeRepository $listeRepository): Response
     {
+        if (!$liste->getUsers()->contains($this->getUser()) && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
+        }
+        
         $articles = $listeRepository->findArticlesByListeId($liste->getId());
 
         return $this->render('liste/show.html.twig', [
@@ -157,13 +161,17 @@ final class ListeController extends AbstractController
     #[Route('/{id}/edit', name: 'app_liste_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Liste $liste, EntityManagerInterface $entityManager): Response
     {
+        if (!$liste->getUsers()->contains($this->getUser()) && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
+        }
+        
         $form = $this->createForm(ListeType::class, $liste);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_liste_show', ['id' => $liste->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('liste/edit.html.twig', [
@@ -176,8 +184,20 @@ final class ListeController extends AbstractController
     public function delete(Request $request, Liste $liste, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$liste->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($liste);
-            $entityManager->flush();
+            if ($liste->getUsers()->contains($this->getUser())) {
+                $liste->removeUser($this->getUser());
+                    
+                if ($liste->getUsers()->isEmpty()) {
+                    $entityManager->remove($liste);
+                }
+                
+                $entityManager->flush();
+            } else {
+                if ($this->isGranted('ROLE_ADMIN')) {
+                    $entityManager->remove($liste);
+                    $entityManager->flush();
+                }
+            }
         }
 
         return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
@@ -186,6 +206,10 @@ final class ListeController extends AbstractController
     #[Route('/{id}/add', name: 'app_liste_add', methods: ['GET', 'POST'])]
     public function addArticle(Request $request, Liste $liste, EntityManagerInterface $entityManager): Response
     {
+        if (!$liste->getUsers()->contains($this->getUser()) && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
+        }
+        
         $listeArticle = new ListeArticle();
         $listeArticle->setListe($liste);
 
@@ -209,25 +233,35 @@ final class ListeController extends AbstractController
     #[Route('/article/{id}/toggle', name: 'app_article_toggle', methods: ['POST'])]
     public function toggleArticleStatus(Request $request, ListeArticle $listeArticle, EntityManagerInterface $entityManager): Response
     {
+        $liste = $listeArticle->getListe();
+        
+        if (!$liste->getUsers()->contains($this->getUser()) && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
+        }
+        
         if ($this->isCsrfTokenValid('toggle'.$listeArticle->getId(), $request->getPayload()->getString('_token'))) {
             // Inverser le statut actuel
             $listeArticle->setAcheter(!$listeArticle->isAcheter());
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_liste_show', ['id' => $listeArticle->getListe()->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_liste_show', ['id' => $liste->getId()], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/article/{id}/delete', name: 'app_article_delete', methods: ['POST'])]
     public function deleteArticle(Request $request, ListeArticle $listeArticle, EntityManagerInterface $entityManager): Response
     {
-        $listeId = $listeArticle->getListe()->getId();
+        $liste = $listeArticle->getListe();
+        
+        if (!$liste->getUsers()->contains($this->getUser()) && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
+        }
 
         if ($this->isCsrfTokenValid('delete'.$listeArticle->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($listeArticle);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_liste_show', ['id' => $listeId], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_liste_show', ['id' => $liste->getId()], Response::HTTP_SEE_OTHER);
     }
 }

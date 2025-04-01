@@ -27,6 +27,10 @@ final class UserController extends AbstractController
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
+        // Vérif admin
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
+        }
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 

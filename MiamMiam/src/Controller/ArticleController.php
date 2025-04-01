@@ -18,6 +18,10 @@ final class ArticleController extends AbstractController
     #[Route('/new', name: 'app_article_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
+        }
+
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
@@ -38,6 +42,10 @@ final class ArticleController extends AbstractController
     #[Route('/{id}/edit', name: 'app_article_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
+        }
+
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
