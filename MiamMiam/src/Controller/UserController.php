@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 #[Route('/user')]
 final class UserController extends AbstractController
@@ -64,11 +65,25 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, User $user, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
+        // Vérifie que l'utilisateur ne supprime que son propre compte
+        $currentUser = $this->getUser();
+        if (!$currentUser || $currentUser->getId() !== $user->getId()) {
+            // Redirection vers la liste index au lieu d'une erreur
+            return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
+            // Remove the user from the database
             $entityManager->remove($user);
             $entityManager->flush();
+            
+            // Déconnexion de l'utilisateur
+            $tokenStorage->setToken(null);
+            $request->getSession()->invalidate();
+            
+            return $this->redirectToRoute('login_page', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
