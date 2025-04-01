@@ -48,6 +48,7 @@
 
 		<div class="actions">
 			<a href="{{ path('app_liste_add', {'id': liste.id}) }}" class="btn btn-primary">Ajouter un article</a>
+			<a href="{{ path('app_liste_users', {'id': liste.id}) }}" class="btn btn-info">Gérer les utilisateurs</a>
 			<a href="{{ path('app_liste_edit', {'id': liste.id}) }}" class="btn btn-secondary">Modifier le nom</a>
 			<a href="{{ path('app_liste_index') }}" class="btn btn-secondary">Retour aux listes</a>
 			{{ include('liste/_delete_form.html.twig') }}

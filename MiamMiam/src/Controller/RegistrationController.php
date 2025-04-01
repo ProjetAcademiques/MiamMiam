@@ -29,20 +29,24 @@ class RegistrationController extends AbstractController
 
 
     #[Route('/registerForm', name: 'app_register')]
-    public function registerForm(Request $request,EntityManagerInterface $entityManager):Response
+    public function registerForm(Request $request, EntityManagerInterface $entityManager): Response
     {
         $session = $this->requestStack->getSession();
-        $session = $request->getSession();
         $email = $session->get('email');
         $password = $session->get('password');
         $pseudo = $request->request->get('pseudonyme');
+        
         if (!$pseudo) {
-            return new Response('Pseudo requis.',400);
+            // Return to register page with error message
+            return $this->render('registration/register.html.twig', [
+                'error_message' => 'Pseudo requis.'
+            ]);
         }
+        
         $utilisateur = new User();
         $utilisateur->setPseudo($pseudo);
         $utilisateur->setEmail($email);
-        $hashedPassword = password_hash($password,PASSWORD_BCRYPT);
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         $utilisateur->setPassword($hashedPassword);
         $utilisateur->setDateCreation(new \DateTime());
         $utilisateur->setIsAdmin(false);
@@ -57,7 +61,7 @@ class RegistrationController extends AbstractController
         $session->set('_security_main', serialize($token));
 
         return $this->redirectToRoute('app_liste_index');
-}
+    }
 
     #[Route('/pastregister', name: 'app_past_register')]
     public function RedirectPastregister(): Response{
@@ -74,30 +78,37 @@ class RegistrationController extends AbstractController
     }
    
 
-
     #[Route('/saveForm', name: 'app_save_form', methods: ['POST'])]
-    public function saveForm1(Request $request,EntityManagerInterface $entityManager):Response
+    public function saveForm1(Request $request, EntityManagerInterface $entityManager): Response
     {
         $session = $request->getSession();
         $email = $request->request->get('email');
         $password = $request->request->get('password');
         $confirmPassword = $request->request->get('passwordConfirm');
+        
+        $errorMessage = null;
+        
         $utilisateur = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
-        if ($utilisateur){
-            return new Response('Addresse-Mail déja existante',400);
+        if ($utilisateur) {
+            $errorMessage = 'Adresse-Mail déjà existante';
+        } elseif ($password !== $confirmPassword) {
+            $errorMessage = 'Le mot de passe et la confirmation doivent être les mêmes';
+        } elseif (!$email || !$password) {
+            $errorMessage = 'Email et mot de passe requis.';
         }
-        if ($password !== $confirmPassword){
-            return new Response('Le mot de passe et la confirmation doivent être les mêmes',400);
+        
+        if ($errorMessage) {
+            // Return to pastregister page with error message
+            return $this->render('registration/pastregister.html.twig', [
+                'error_message' => $errorMessage,
+                'last_email' => $email
+            ]);
         }
-        if (!$email || !$password) {
-            return new Response('Email et mot de passe requis.',400);
-
-        }
+        
         $session->set('email', $email);
         $session->set('password', $password);
         $session->save();
+        
         return $this->redirectToRoute('app_register_form');
-
-}
-
+    }
 }

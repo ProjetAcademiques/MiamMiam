@@ -75,3 +75,17 @@ a.btn{
     position: absolute;
     bottom: 0;
 }
+
+.alert {
+    width: 80%;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}

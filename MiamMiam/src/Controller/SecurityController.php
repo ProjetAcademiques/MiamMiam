@@ -31,14 +31,14 @@ class SecurityController extends AbstractController
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
+        // last email entered by the user
+        $lastEmail = $authenticationUtils->getLastUsername();
         if ($this->getUser()){
             return $this->redirectToRoute('app_liste_index');
         }
 
         return $this->render('security/login.html.twig', [
-            'last_username' => $lastUsername,
+            'last_email' => $lastEmail,
             'error' => $error,
         ]);
     }
@@ -49,25 +49,38 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
-    #[Route('/loginForm', name: 'app_login_form', methods: ['POST'])]
 
-    public function LoginForm(Request $request,EntityManagerInterface $entityManager):Response{
+
+    #[Route('/loginForm', name: 'app_login_form', methods: ['POST'])]
+    public function LoginForm(Request $request, EntityManagerInterface $entityManager): Response
+    {
         $session = $this->requestStack->getSession();
         $email = $request->request->get('email');
         $password = $request->request->get('password');
         $utilisateur = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+        
+        $errorMessage = null;
+        
         if (!$utilisateur) {
-            return new Response('Email incorrect.',401);
+            $errorMessage = 'Email incorrect.';
+        } elseif (!password_verify($password, $utilisateur->getPassword())) {
+            $errorMessage = 'Mot de passe incorrect.';
         }
-        if (!password_verify($password, $utilisateur->getPassword())) {
-            return new Response('Mot de passe incorrect.', 401);
+        
+        if ($errorMessage) {
+            // Return to login page with error message
+            return $this->render('security/login.html.twig', [
+                'last_email' => $email,
+                'error_message' => $errorMessage,
+            ]);
         }
+        
         $token = new UsernamePasswordToken($utilisateur, 'main', $utilisateur->getRoles());
         $this->tokenStorage->setToken($token);
         $session->set('_security_main', serialize($token));
         return $this->redirectToRoute('app_liste_index');
-
     }
+    
     #[Route('/')]
     public function redirectListe(): Response{
         return $this->redirectToRoute('login_page');

@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Liste;
 use App\Entity\ListeArticle;
+use App\Entity\User;
 use App\Form\ListeType;
 use App\Form\ListeArticleType;
+use App\Form\AddUserToListeType;
 use App\Repository\ListeRepository;
 use App\Repository\ListeArticleRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -263,5 +266,59 @@ final class ListeController extends AbstractController
         }
 
         return $this->redirectToRoute('app_liste_show', ['id' => $liste->getId()], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/users', name: 'app_liste_users', methods: ['GET', 'POST'])]
+    public function manageUsers(Request $request, Liste $liste, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
+        // Vérifier que l'utilisateur actuel a accès à la liste
+        if (!$liste->getUsers()->contains($this->getUser()) && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_liste_show', ['id' => $liste->getId()], Response::HTTP_SEE_OTHER);
+        }
+        
+        $form = $this->createForm(AddUserToListeType::class);
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $email = $data['email'];
+            
+            // Rechercher l'utilisateur par email
+            $user = $userRepository->findOneBy(['email' => $email]);
+            
+            if ($user && !$liste->getUsers()->contains($user)) {
+                // Ajouter l'utilisateur à la liste
+                $liste->addUser($user);
+                $entityManager->flush();
+            }
+            
+            return $this->redirectToRoute('app_liste_users', ['id' => $liste->getId()], Response::HTTP_SEE_OTHER);
+        }
+        
+        return $this->render('liste/users.html.twig', [
+            'liste' => $liste,
+            'form' => $form->createView(),
+        ]);
+    }
+    
+    #[Route('/{id}/remove-user/{userId}', name: 'app_liste_remove_user', methods: ['POST'])]
+    public function removeUser(Request $request, Liste $liste, int $userId, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
+        // Vérifier que l'utilisateur actuel a accès à la liste
+        if (!$liste->getUsers()->contains($this->getUser()) && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_liste_show', ['id' => $liste->getId()], Response::HTTP_SEE_OTHER);
+        }
+        
+        if ($this->isCsrfTokenValid('remove_user'.$userId, $request->getPayload()->getString('_token'))) {
+            $user = $userRepository->find($userId);
+            
+            // On empêche l'utilisateur de se retirer lui-même pour éviter les situations étranges
+            if ($user && $user !== $this->getUser() && $liste->getUsers()->contains($user)) {
+                $liste->removeUser($user);
+                $entityManager->flush();
+            }
+        }
+        
+        return $this->redirectToRoute('app_liste_users', ['id' => $liste->getId()], Response::HTTP_SEE_OTHER);
     }
 }

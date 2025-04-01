@@ -10,9 +10,12 @@
 		</div>
 		<div class="ConnexionForm">
 			<h2>Se connecter</h2>
+			{% if error_message is defined and error_message %}
+				<div class="alert alert-danger">{{ error_message }}</div>
+			{% endif %}
 			<form action="{{path('app_login_form')}}" method="POST">
 				<label for="E-mail">E-mail*</label>
-				<input type="email" name="email" id="E-mail" required>
+				<input type="email" name="email" id="E-mail" value="{{ last_email|default('') }}" required>
 				<label for="Password">Mot de passe*</label>
 				<input type="password" name="password" id="Password" required>
 				<button class="rl" type="submit">Se connecter</button>

@@ -11,9 +11,12 @@
 		</div>
 		<div class="InscriptionForm">
 			<h2>S'inscrire</h2>
+			{% if error_message is defined and error_message %}
+				<div class="alert alert-danger">{{ error_message }}</div>
+			{% endif %}
 			<form action="{{ path('app_save_form')}}" method="POST">
 				<label for="E-mail">E-mail*</label>
-				<input type="email" name="email" id="E-mail" required>
+				<input type="email" name="email" id="E-mail" value="{{ last_email|default('') }}" required>
 				<label for="Password">Mot de passe*</label>
 				<input type="password" name="password" id="Password" required>
 				<label for="PasswordConfirm">Confirmation mot de passe*</label>

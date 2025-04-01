@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer les utilisateurs de la liste
+{% endblock %}
+
+{% block body %}
+	<h1>Gérer les utilisateurs de la liste</h1>
+	<main>
+		<div class="user-management">
+			<h2>Utilisateurs actuels</h2>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Pseudo</th>
+						<th>Email</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for user in liste.users %}
+						<tr>
+							<td>{{ user.pseudo }}</td>
+							<td>{{ user.email }}</td>
+							<td>
+								<div class="actions">
+									{% if user != app.user %}
+										<form method="post" action="{{ path('app_liste_remove_user', {'id': liste.id, 'userId': user.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir retirer cet utilisateur de la liste?');">
+											<input type="hidden" name="_token" value="{{ csrf_token('remove_user' ~ user.id) }}">
+											<button class="btn btn-danger">Retirer</button>
+										</form>
+									{% else %}
+										<span class="badge bg-secondary">Vous</span>
+									{% endif %}
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+			<h2>Ajouter un utilisateur</h2>
+			<div class="actions">
+				{{ form_start(form) }}
+
+				<div class="mb-3">
+					{{ form_label(form.email) }}
+					<div class="mt-2" style="max-width: 300px;">
+						{{ form_widget(form.email) }}
+					</div>
+					{{ form_errors(form.email) }}
+				</div>
+
+				<button type="submit" class="btn btn-success">Ajouter</button>
+				{{ form_end(form) }}
+				<a href="{{ path('app_liste_show', {'id': liste.id}) }}" class="btn btn-secondary">Retour à la liste</a>
+			</div>
+		</div>
+	</main>
+{% endblock %}

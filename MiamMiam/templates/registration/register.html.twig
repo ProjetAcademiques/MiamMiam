@@ -9,6 +9,9 @@
 		</div>
 		<div class="InscriptionForm">
 			<h2>Choisir un pseudonyme</h2>
+			{% if error_message is defined and error_message %}
+				<div class="alert alert-danger">{{ error_message }}</div>
+			{% endif %}
 			<form action="{{path('app_register')}}" method="POST">
 				<label for="Pseudonyme">pseudonyme*</label>
 				<input type="text" name="pseudonyme" id="Pseudonyme" required>
