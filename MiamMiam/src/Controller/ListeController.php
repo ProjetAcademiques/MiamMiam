@@ -30,7 +30,7 @@ final class ListeController extends AbstractController
             $entityManager->persist($liste);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_liste_show', ['id' => $liste->getId()]);
         }
 
         $listes = $listeRepository->findListesByUser($user);
@@ -140,26 +140,6 @@ final class ListeController extends AbstractController
             'nbArticlesParListe' => $nbArticlesParListe,
             'statsGlobales' => $statsGlobales,
             'form' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/new', name: 'app_liste_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $liste = new Liste();
-        $form = $this->createForm(ListeType::class, $liste);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($liste);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('liste/new.html.twig', [
-            'liste' => $liste,
-            'form' => $form,
         ]);
     }
 
