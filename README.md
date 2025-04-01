@@ -91,3 +91,14 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+## pour commencer
+
+- cloner le projet dans son serveur local (wamp, xamp etc...)
+- composer install
+- php bin/console
+- npm install
+- ajouter .env.local dans MIAMMIAM et ajouter cette ligne DATABASE_URL="mysql://miammiam:Monn3t%236752@85.215.130.37:3306/miammiam?serverVersion=8.0.32&charset=utf8mb4"
+- npm run dev
+- npm run build
+- npm run watch
