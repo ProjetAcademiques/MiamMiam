@@ -50,8 +50,7 @@ final class UserController extends AbstractController
             
             $entityManager->flush();
 
-            $this->addFlash('success', 'Votre profil a été mis à jour avec succès.');
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_crud_show', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/edit.html.twig', [
@@ -68,6 +67,6 @@ final class UserController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_liste_index', [], Response::HTTP_SEE_OTHER);
     }
 }
